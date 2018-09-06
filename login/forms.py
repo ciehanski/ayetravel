@@ -3,15 +3,15 @@ from django.core import validators
 
 
 class UsernameTextBox(forms.Form):
-    email = forms.CharField(max_length=100, required=True, label='',
-        widget=forms.TextInput(
-            attrs={'class':'form-control',
-                   'placeholder':'Username',
-                   'id': 'username_textbox',
-                   'type': 'text',
-                   'required': '',
-                   'name': 'username',
-                   }))
+    email = forms.CharField(max_length=50, required=True, label='',
+                            widget=forms.TextInput(
+                                attrs={'class': 'form-control',
+                                       'placeholder': 'Username',
+                                       'id': 'username_textbox',
+                                       'type': 'text',
+                                       'required': '',
+                                       'name': 'username',
+                                       }))
     botcatcher = forms.CharField(required=False,
                                  widget=forms.HiddenInput,
                                  validators=[validators.MaxLengthValidator(0)])
@@ -19,14 +19,14 @@ class UsernameTextBox(forms.Form):
 
 class PasswordTextBox(forms.Form):
     password = forms.CharField(max_length=60, required=True, label='',
-        widget=forms.PasswordInput(
-            attrs={'class':'form-control',
-                   'placeholder':'Password',
-                   'id':'password_textbox',
-                   'type': 'password',
-                   'required': '',
-                   'name': 'password',
-                   }))
+                               widget=forms.PasswordInput(
+                                   attrs={'class': 'form-control',
+                                          'placeholder': 'Password',
+                                          'id': 'password_textbox',
+                                          'type': 'password',
+                                          'required': '',
+                                          'name': 'password',
+                                          }))
 
     def clean(self):
         all_clean_data = super(PasswordTextBox).clean()
@@ -37,10 +37,3 @@ class PasswordTextBox(forms.Form):
         if password > 60:
             raise forms.ValidationError('Password is too long!')
 
-# class LoginButton(forms.Form):
-#     button = forms.CharField(
-#         widget=forms.CharField(
-#             attrs={'class':'btn btn-outline-secondary',
-#                    'type':'button',
-#                    'id':'button-addon2'
-#                    }))

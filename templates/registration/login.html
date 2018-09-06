@@ -20,7 +20,12 @@
     <script type="text/javascript" src="{% static "login/js/login.js" %}" async></script>
   </head>
   <body>
-    <form class="log_in_form" action="../app/index.html" method="POST">
+
+    {% if form.errors %}
+      <span class="error text-danger">Some Errors related to something</span>
+    {% endif %}
+
+    <form class="log_in_form" action="{% url 'login' %}" method="POST">
     {% csrf_token %}
       {#    Log In Header    #}
       <h1 id="log_in_header">LOG IN</h1>
@@ -28,7 +33,7 @@
         {#    Email Textbox    #}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1"><img id="email_img" src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes/128/user-male-circle-blue-512.png"></span>
+            <span class="input-group-text"><img id="email_img" src="{% static "login/img/user_icon.png" %}"></span>
           </div>
           {{ email_textbox }}
         </div>
@@ -36,12 +41,11 @@
         {#   Password Textbox     #}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1"><img id="pass_img" src="http://pluspng.com/img-png/key-png-clipart-1024.png"></span>
+            <span class="input-group-text"><img id="pass_img" src="{% static "login/img/pass_icon.png" %}"></span>
           </div>
           {{ password_textbox }}
           {#     Login Button       #}
-{#          {{ login_button }}#}
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2"><img id="login_button_img" src="{% static "login/img/login_arrow.png" %}" alt="Uh oh, the background couldn't load!"></button>
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><img id="login_button_img" src="{% static "login/img/login_arrow.png" %}" alt="Uh oh, the background couldn't load!"></button>
         </div>
 
         {#    recaptcha    #}
