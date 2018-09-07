@@ -12,6 +12,7 @@ class UsernameTextBox(forms.Form):
                                        'required': '',
                                        'name': 'username',
                                        }))
+
     botcatcher = forms.CharField(required=False,
                                  widget=forms.HiddenInput,
                                  validators=[validators.MaxLengthValidator(0)])
@@ -27,13 +28,3 @@ class PasswordTextBox(forms.Form):
                                           'required': '',
                                           'name': 'password',
                                           }))
-
-    def clean(self):
-        all_clean_data = super(PasswordTextBox).clean()
-        password = all_clean_data['password']
-
-        if password < 9:
-            raise forms.ValidationError('Your password is not long enough.')
-        if password > 60:
-            raise forms.ValidationError('Password is too long!')
-

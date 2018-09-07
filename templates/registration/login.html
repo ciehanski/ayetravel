@@ -22,10 +22,10 @@
   <body>
 
     {% if form.errors %}
-      <span class="error text-danger">Some Errors related to something</span>
+      <span class="error text-danger">Username & Password did not match. Please try again.</span>
     {% endif %}
 
-    <form class="log_in_form" action="{% url 'login' %}" method="POST">
+    <form class="log_in_form" action="" method="POST">
     {% csrf_token %}
       {#    Log In Header    #}
       <h1 id="log_in_header">LOG IN</h1>
