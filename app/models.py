@@ -1,7 +1,17 @@
 from django.db import models
 
-# Create your models here.
 
-class AddVacationIdea(models.Model):
+class Trips(models.Model):
     pass
 
+
+class Notifications(models.Model):
+    pass
+
+
+class UserSettings(models.Model):
+    pass
+
+
+class ProfilePicture(models.Model):
+    pass

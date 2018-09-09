@@ -98,6 +98,7 @@ DATABASES = {
 
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/app/'
+LOGOUT_REDIRECT_URL = '/account/login'
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {'min_length':8},
+        'OPTIONS': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -140,12 +141,30 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     'C:\\Users\\Ryan\\PycharmProjects\\ayetravel\\static',
 ]
 
+# Media
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+# HTTPS
+# SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Cookies
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
+# SESSION_COOKIE_HTTPONLY = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+
+# PREPEND_WWW = True

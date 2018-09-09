@@ -1,69 +1,88 @@
 from django.shortcuts import render
 from login import forms
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 import urllib
 import json
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class LoginView(TemplateView):
     context_object_name = 'login'
-    template_name = 'registration/login.html'
-    login_render = ''
+    template_name = '../../login/templates/login/login.html'
+    login_form = forms.LoginForm()
 
     def get(self, request, *args, **kwargs):
-        username_textbox = forms.UsernameTextBox()
-        password_textbox = forms.PasswordTextBox()
-        global login_render
-        login_render = render(request, 'registration/login.html', {'email_textbox': username_textbox,
-                                                                   'password_textbox': password_textbox})
-        return login_render
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('app:index'))
+        else:
+            return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
 
     def post(self, request, *args, **kwargs):
-        global login_render
         if request.method == 'POST':
-            username_form = request.POST.get('username')
-            password_form = request.POST.get('password')
+            username_form = request.POST.get('username_textbox')
+            password_form = request.POST.get('password_textbox')
+            remember_me_form = request.POST.get('remember_me_checkbox')
             user = authenticate(username=username_form, password=password_form)
-            if user is not None:
 
-                ''' Begin reCAPTCHA validation '''
-                recaptcha_response = request.POST.get('g-recaptcha-response')
-                url = 'https://www.google.com/recaptcha/api/siteverify'
-                values = {
-                    'secret': '6Lcxam4UAAAAAMJYHMLc6obuBA6R1DHYHHfavqph',
-                    'response': recaptcha_response
-                }
-                data = urllib.parse.urlencode(values).encode()
-                req = urllib.request.Request(url, data=data)
-                response = urllib.request.urlopen(req)
-                result = json.loads(response.read().decode())
-                ''' End reCAPTCHA validation '''
-                # Check reCAPTCHA verification
-                if result['success']:
+            ''' Begin reCAPTCHA validation '''
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': '6Lcxam4UAAAAAMJYHMLc6obuBA6R1DHYHHfavqph',
+                'response': recaptcha_response
+            }
+            data = urllib.parse.urlencode(values).encode()
+            req = urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            ''' End reCAPTCHA validation '''
+
+            if result['success']:
+                if user:
                     if user.is_active:
                         login(request, user)
-                        return HttpResponseRedirect(reverse('index'))
+                        # Handle remember me, don't expire user auth
+                        if not request.POST.get(remember_me_form, None):
+                            request.session.set_expiry(0)
+                        return HttpResponseRedirect(reverse('app:index'))
                     else:
                         # Account not active
-                        print('Account not active')
-                        return login_render
+                        return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
                 else:
-                    # recaptcha not completed
-                    print('reCAPTCHA not completed')
-                    return login_render
+                    # Not a valid user
+                    return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
             else:
-                # Not a valid user
-                print(f'Not a valid user: {username_form} {password_form}')
-                return login_render
+                # recaptcha not completed
+                return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
         else:
-            return login_render
+            # Empty response
+            return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
 
 
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
+class LogoutView(LoginRequiredMixin, TemplateView):
+    context_object_name = 'logout'
+    template_name = '../../login/templates/login/logout.html'
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return render(request, '../../login/templates/login/logout.html')
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    context_object_name = 'profile'
+    template_name = '../../login/templates/login/profile.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, '../../login/templates/login/profile.html')
+
+
+class RecoveryView(LoginRequiredMixin, TemplateView):
+    context_object_name = 'recovery'
+    template_name = '../../login/templates/login/recovery.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, '../../login/templates/login/recovery.html')
+

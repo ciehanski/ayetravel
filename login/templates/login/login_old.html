@@ -25,17 +25,17 @@
       <span class="error text-danger">Username & Password did not match. Please try again.</span>
     {% endif %}
 
-    <form class="log_in_form" action="" method="POST">
+    <form action="." method="post">
     {% csrf_token %}
       {#    Log In Header    #}
       <h1 id="log_in_header">LOG IN</h1>
 
-        {#    Email Textbox    #}
+        {#    Username Textbox    #}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><img id="email_img" src="{% static "login/img/user_icon.png" %}"></span>
           </div>
-          {{ email_textbox }}
+          {{ username_textbox }}
         </div>
 
         {#   Password Textbox     #}
