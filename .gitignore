@@ -131,3 +131,4 @@ venv370/Scripts/winsound_d.pyd
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+*.xml___jb_tmp___

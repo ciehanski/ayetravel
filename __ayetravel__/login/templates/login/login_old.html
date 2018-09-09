@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    {#   meta   #}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#   misc   #}
+    <title>ayetravel - Log In</title>
+    {#  css  #}
+    <link rel="stylesheet" href="{% static "login/css/login.css" %}">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    {#  scripts  #}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static "login/js/login.js" %}" async></script>
+  </head>
+  <body>
+
+    {% if form.errors %}
+      <span class="error text-danger">Username & Password did not match. Please try again.</span>
+    {% endif %}
+
+    <form action="." method="post">
+    {% csrf_token %}
+      {#    Log In Header    #}
+      <h1 id="log_in_header">LOG IN</h1>
+
+        {#    Username Textbox    #}
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><img id="email_img" src="{% static "login/img/user_icon.png" %}"></span>
+          </div>
+          {{ username_textbox }}
+        </div>
+
+        {#   Password Textbox     #}
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><img id="pass_img" src="{% static "login/img/pass_icon.png" %}"></span>
+          </div>
+          {{ password_textbox }}
+          {#     Login Button       #}
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><img id="login_button_img" src="{% static "login/img/login_arrow.png" %}" alt="Uh oh, the background couldn't load!"></button>
+        </div>
+
+        {#    recaptcha    #}
+        <center><div class="g-recaptcha" data-sitekey="6Lcxam4UAAAAAOx-9RWDxhalnW1ZIPzoQU5x4M9x"></div></center>
+
+    </form>
+  </body>
+</html>
