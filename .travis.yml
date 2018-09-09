@@ -3,10 +3,10 @@ python:
   - 3.6
 services:
   - memcached
-  - sqlite
+  - sqlite3
   # - postgresql
 env:
-  - DJANGO=2.1.1 DB=sqlite
+  - DJANGO=2.1.1 DB=sqlite3
 install:
   - pip install -r requirements.txt
 before_script:
