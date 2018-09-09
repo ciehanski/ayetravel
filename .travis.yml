@@ -12,5 +12,5 @@ install:
 before_script:
   # - postgres -e 'create database test;' -u root
 script:
-  - python manage.py test
+  - python __ayetravel__/manage.py test
 
