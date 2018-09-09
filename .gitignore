@@ -1,5 +1,5 @@
-app/__pycache__/
-.idea/
+__ayetravel__.app/__pycache__/
+__ayetravel__.idea/
 
 # Environments
 .env
