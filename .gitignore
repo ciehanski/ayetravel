@@ -1,5 +1,6 @@
 __ayetravel__.app/__pycache__/
 __ayetravel__.idea/
+.idea/
 
 # Environments
 .env
