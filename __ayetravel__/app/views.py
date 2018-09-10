@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, DetailView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from app.models import Trips, TravelLogs
+from app.forms import CreateTripForm
 from django.urls import reverse_lazy
 
 
@@ -33,7 +34,19 @@ class CreateTrip(LoginRequiredMixin, CreateView):
     context_object_name = 'create_trip'
     template_name = '../../app/templates/app/create_trip.html'
     model = Trips
-    fields = ['user_location', 'location', 'date', 'budget', 'participants']
+    exclude = 'owner'
+
+    form = CreateTripForm()
+
+    def post(self, request, *args, **kwargs):
+        form = CreateTripForm(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return TripsList(request)
+        else:
+            print('Create Trip - Form invalid')
+            return render(request, '../../app/templates/app/create_trip.html', {'form': form})
 
 
 class UpdateTrip(LoginRequiredMixin, UpdateView):
