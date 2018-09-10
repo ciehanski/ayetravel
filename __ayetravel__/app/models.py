@@ -13,6 +13,7 @@ class Trips(models.Model):
     end_date = models.DateField(str(datetime.date.today()))
     budget = models.IntegerField()
     participants = models.IntegerField()
+    picture = models.ImageField(default='')
 
     def __str__(self):
         return str(self.pk)
@@ -30,6 +31,7 @@ class TravelLogs(models.Model):
     end_date = models.DateField(str(datetime.date.today()))
     budget = models.IntegerField()
     participants = models.IntegerField()
+    picture = models.ImageField(default='')
 
     def __str__(self):
         return str(self.pk)

@@ -26,7 +26,7 @@
                             <!-- Logo -->
                             <div class="card-header pt-4 pb-4 text-center bg-primary">
                                 <a href="">
-                                    <span><img src="{% static "app/img/logo.png" %}" alt="" height="90"></span>
+                                    <span><img src="{% static "app/img/logo.png" %}" alt="" height="75"></span>
                                 </a>
                             </div>
 
@@ -35,6 +35,21 @@
                                 <form action="." method="POST">
 
                                     {% csrf_token %}
+
+                                    {% if form.errors %}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <div class="alert alert-danger">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                            {% for error in form.non_field_errors %}
+                                                <div class="alert alert-danger">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endif %}
 
                                     <div class="form-group">
                                         <label for="username_textbox">Username</label>
@@ -58,21 +73,6 @@
                                     <div class="form-group mb-0 text-center">
                                         <button class="btn btn-primary" type="submit"> Log In </button>
                                     </div>
-
-                                    {% if form.errors %}
-                                        {% for field in form %}
-                                            {% for error in field.errors %}
-                                                <div class="alert alert-danger">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                            {% for error in form.non_field_errors %}
-                                                <div class="alert alert-danger">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endfor %}
-                                    {% endif %}
 
                                 </form>
                             </div> <!-- end card-body -->

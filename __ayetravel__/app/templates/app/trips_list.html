@@ -56,10 +56,11 @@
                             <div class="col-md-6 col-xl-3">
                                 <!-- project card -->
                                 {% for trip in trips_list %}
+                                {% if trip.owner.get_username == user.get_username %}
                                 <div class="card d-block">
                                     <div class="card-body">
                                         <div class="dropdown card-widgets">
-                                            <a href="trips/{{ trip.id }}" class="dropdown-toggle arrow-none" data-toggle="dropdown" aria-expanded="false">
+                                            <a href="{{ trip.id }}" class="dropdown-toggle arrow-none" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="dripicons-dots-3"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -123,7 +124,7 @@
                                 </div> <!-- end card-->
                             </div> <!-- end col -->
                         </div>
-
+                        {% endif %}
                         {% endfor %}
                         <!-- end row-->
                         
