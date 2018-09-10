@@ -8,5 +8,4 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && rm -v /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
-CMD ["python __ayetravel__/manage.py test"]
+CMD gunicorn ayetravel.wsgi && ["nginx", "-g", "daemon off;"]
