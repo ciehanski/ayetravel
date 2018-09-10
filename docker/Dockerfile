@@ -7,6 +7,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && rm -v /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY ../__ayetravel__/ 
 EXPOSE 8080
-RUN cd ciehanski/ayetravel/__ayetravel__ 
+RUN cd __ayetravel__ 
 CMD gunicorn ayetravel.wsgi && ["nginx", "-g", "daemon off;"]
