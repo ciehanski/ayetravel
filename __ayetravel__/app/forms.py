@@ -1,6 +1,8 @@
 from django import forms
-from django.core import validators
+from app.models import Trips
 
 
 class CreateTripForm(forms.ModelForm):
-    pass
+    class Meta:
+        model = Trips
+        fields = '__all__'
