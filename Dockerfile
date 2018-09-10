@@ -5,7 +5,7 @@ COPY requirements.txt .
 COPY __ayetravel__/* ayetravel_docker/
 RUN apt-get update && apt-get install -y nginx python3-dev \
     && python3 -m pip install --upgrade pip \
-    && pip install requirements.txt \
+    && pip install -r requirements.txt \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && rm -v /etc/nginx/nginx.conf
