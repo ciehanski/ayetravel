@@ -1,0 +1,22 @@
+version: '3'
+services:
+  cache:
+     image: memcached
+     container_name: memcached
+     restart: always
+  db:
+     image: posgresql
+     container_name: postgres_db
+     restart: always
+     environment:
+        - MYSQL_ROOT_PASSWORD="secret"
+  web:
+     image: nginx
+     build: ./webapp
+     depends_on:
+        - db
+        - cache
+     container_name: nginx_rp
+     restart: always
+     ports:
+        - "8080:80"
