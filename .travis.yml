@@ -12,5 +12,4 @@ install:
 before_script:
   # - postgres -e 'create database test;' -u root
 script:
-  - cd ciehanski/ayetravel/__ayetravel__
-  - gunicorn ayetravel.wsgi
+  - gunicorn ciehanski.ayetravel.__ayetravel__.ayetravel.wsgi
