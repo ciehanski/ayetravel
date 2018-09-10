@@ -12,6 +12,6 @@ install:
   - pip install -r requirements.txt
 before_script:
   # - postgres -e 'create database test;' -u root
-  - cd ciehanski/ayetravel/__ayetravel__
+  - cd $TRAVIS_BUILD_DIR/__ayetravel__
 script:
   - gunicorn ayetravel.wsgi
