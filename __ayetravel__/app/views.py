@@ -1,41 +1,50 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView, DetailView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from app.models import Trips
+from django.urls import reverse_lazy
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
-    template = '../../app/templates/app/index.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, '../../app/templates/app/index.html')
+    context_object_name = 'index'
+    template_name = '../../app/templates/app/index.html'
 
 
-class TripsList(LoginRequiredMixin, TemplateView):
-    template = '../../app/templates/app/trips_list.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, '../../app/templates/app/trips_list.html')
-
-
-class TripsDetailed(LoginRequiredMixin, TemplateView):
-    template = '../../app/templates/app/trips_detailed.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, '../../app/templates/app/trips_detailed.html')
+class TripsList(LoginRequiredMixin, ListView):
+    context_object_name = 'trips_list'
+    template_name = '../../app/templates/app/trips_list.html'
+    model = Trips
 
 
-class CreateTrip(LoginRequiredMixin, TemplateView):
-    template = '../../app/templates/app/create_trip.html'
+class TripsDetailed(LoginRequiredMixin, DetailView):
+    context_object_name = 'trips_detailed'
+    template_name = '../../app/templates/app/trips_detailed.html'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, '../../app/templates/app/create_trip.html')
+
+class CreateTrip(LoginRequiredMixin, CreateView):
+    context_object_name = 'create_trip'
+    template_name = '../../app/templates/app/create_trip.html'
+    model = Trips
+    fields = ['user_location', 'location', 'date', 'budget', 'participants']
+
+
+class UpdateTrip(LoginRequiredMixin, UpdateView):
+    context_object_name = 'update_trip'
+    template_name = '../../app/templates/app/create_trip.html'
+    model = Trips
+    fields = ['user_location', 'date', 'budget', 'participants']
+
+
+class DeleteTrip(LoginRequiredMixin, DeleteView):
+    context_object_name = 'update_trip'
+    template_name = '../../app/templates/app/create_trip.html'
+    model = Trips
+    success_url = reverse_lazy('app:trips_list')
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
-    template = '../../app/templates/app/calendar.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, '../../app/templates/app/calendar.html')
+    context_object_name = 'calendar'
+    template_name = '../../app/templates/app/calendar.html'
 
 
 def handler404(request):

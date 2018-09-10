@@ -5,11 +5,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 import urllib
 import json
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class LoginView(TemplateView):
+class LoginView(FormView):
     context_object_name = 'login'
     template_name = '../../login/templates/login/login.html'
     login_form = forms.LoginForm()

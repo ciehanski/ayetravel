@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% load static %}
 
 {% block body_block %}
                     <!-- Start Content-->
@@ -11,12 +12,12 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Projects</a></li>
-                                            <li class="breadcrumb-item active">Project Details</li>
+                                            <li class="breadcrumb-item"><a href="{% url "app:index" %}">Dashboard</a></li>
+                                            <li class="breadcrumb-item"><a href="{% url "app:trips_list" %}">Trips</a></li>
+                                            <li class="breadcrumb-item active">{{ trips_detailed.name }}</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Project Details</h4>
+                                    <h4 class="page-title">Trip Details</h4>
                                 </div>
                             </div>
                         </div>     
@@ -44,7 +45,7 @@
                                         </div>
                                         <!-- project title-->
                                         <h3 class="mt-0">
-                                            App design and development
+                                            {{ trips_detailed.name }}
                                         </h3>
                                         <div class="badge badge-secondary mb-3">Ongoing</div>
 
@@ -78,7 +79,7 @@
                                             <div class="col-md-4">
                                                 <div class="mb-4">
                                                     <h5>Budget</h5>
-                                                    <p>$15,800</p>
+                                                    <p>{{ trips_detailed.budget }}</p>
                                                 </div>
                                             </div>
                                         </div>

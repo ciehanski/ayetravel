@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>ayetravel</title>
+        <title>{% block title_block %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -32,12 +32,12 @@
                 <div class="slimscroll-menu">
 
                     <!-- LOGO -->
-                    <a href="../app/templates/app/index.html" class="logo text-center">
+                    <a href="{% url "app:index" %}" class="logo text-center">
                         <span class="logo-lg">
-                            <img src="{% static "app/img/logo.png" %}" alt="" height="16">
+                            <img src="{% static "app/img/logo.png" %}" alt="" height="90">
                         </span>
                         <span class="logo-sm">
-                            <img src="{% static "app/img/logo_sm.png" %}" alt="" height="16">
+                            <img src="{% static "app/img/logo_sm.png" %}" alt="" height="25">
                         </span>
                     </a>
 
@@ -72,7 +72,7 @@
 
                     </ul>
 
-                    <!-- Help Box -->
+{#                    <!-- Help Box -->#}
 {#                    <div class="help-box text-white text-center">#}
 {#                        <a href="javascript: void(0);" class="float-right close-btn text-white">#}
 {#                            <i class="mdi mdi-close"></i>#}
@@ -82,8 +82,8 @@
 {#                        <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>#}
 {#                        <a href="javascript: void(0);" class="btn btn-outline-light btn-sm">Upgrade</a>#}
 {#                    </div>#}
-                    <!-- end Help Box -->
-                    <!-- End Sidebar -->
+{#                    <!-- end Help Box -->#}
+{#                    <!-- End Sidebar -->#}
 
                     <div class="clearfix"></div>
 
@@ -262,7 +262,7 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        2018 © Hyper - Coderthemes.com
+                                        2018 © ayetravel
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-md-right footer-links d-none d-md-block">
