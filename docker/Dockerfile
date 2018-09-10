@@ -1,6 +1,6 @@
 FROM debian:latest
 MAINTAINER Ryan Ciehanski "ryan@ciehanski.com"
-RUN sudo apt-get install -y nginx python3.7 python3-pip python3-dev
+RUN apt-get install -y nginx python3.7 python3-pip python3-dev
 COPY requirements.txt requirements.txt
 RUN pip install requirements.txt
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
