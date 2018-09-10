@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^mytrips/trip/update/(?P<pk>\d+)/$', views.UpdateTrip.as_view(), name='update_trip'),
     url(r'^mytrips/trip/delete/(?P<pk>\d+)/$', views.DeleteTrip.as_view(), name='delete_trip'),
     url(r'^calendar/$', views.CalendarView.as_view(), name='calendar'),
+    url(r'^mytravellogs/', views.TravelLogList.as_view(), name='travel_log_list'),
 ]

@@ -1,13 +1,20 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, DetailView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.models import Trips
+from app.models import Trips, TravelLogs
 from django.urls import reverse_lazy
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
+class IndexView(LoginRequiredMixin, ListView):
     context_object_name = 'index'
     template_name = '../../app/templates/app/index.html'
+    model = Trips
+
+
+class TravelLogList(LoginRequiredMixin, ListView):
+    context_object_name = 'travel_log_list'
+    template_name = '../../app/templates/app/travel_log.html'
+    model = TravelLogs
 
 
 class TripsList(LoginRequiredMixin, ListView):
@@ -19,6 +26,7 @@ class TripsList(LoginRequiredMixin, ListView):
 class TripsDetailed(LoginRequiredMixin, DetailView):
     context_object_name = 'trips_detailed'
     template_name = '../../app/templates/app/trips_detailed.html'
+    model = Trips
 
 
 class CreateTrip(LoginRequiredMixin, CreateView):
