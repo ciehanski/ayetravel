@@ -25,6 +25,8 @@ class LoginView(FormView):
             username_form = request.POST.get('username_textbox')
             password_form = request.POST.get('password_textbox')
             remember_me_form = request.POST.get('remember_me_checkbox')
+            botcatcher_form = request.POST.get('botcatcher')
+            print(botcatcher_form)
             user = authenticate(username=username_form, password=password_form)
 
             ''' Begin reCAPTCHA validation '''
@@ -40,7 +42,7 @@ class LoginView(FormView):
             result = json.loads(response.read().decode())
             ''' End reCAPTCHA validation '''
 
-            if result['success']:
+            if result['success'] and botcatcher_form is None:
                 if user:
                     if user.is_active:
                         login(request, user)
@@ -55,7 +57,7 @@ class LoginView(FormView):
                     # Not a valid user
                     return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
             else:
-                # recaptcha not completed
+                # recaptcha not completed or botcatcher textbox filled out - we have a bot
                 return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
         else:
             # Empty response

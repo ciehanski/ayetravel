@@ -13,7 +13,10 @@ class LoginForm(forms.Form):
                                           }))
 
     botcatcher = forms.CharField(required=False, validators=[validators.MaxLengthValidator(0)],
-                                 widget=forms.HiddenInput())
+                                 widget=forms.HiddenInput(
+                                     attrs={'name': 'botcatcher',
+                                            'id': 'botcatcher',
+                                           }))
 
     password_textbox = forms.CharField(max_length=60, required=True, label='Password',
                                widget=forms.PasswordInput(
