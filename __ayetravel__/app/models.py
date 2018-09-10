@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Trips(models.Model):
-    owner = models.ForeignKey(User, on_delete='', default='')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     user_location = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=50, blank=True)
     destination = models.CharField(max_length=100, blank=True)
@@ -23,7 +23,7 @@ class Trips(models.Model):
 
 
 class TravelLogs(models.Model):
-    owner = models.ForeignKey(User, on_delete='', default='')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     user_location = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=50, blank=True)
     destination = models.CharField(max_length=100, blank=True)
