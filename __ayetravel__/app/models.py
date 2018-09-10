@@ -2,16 +2,13 @@ from django.db import models
 
 
 class Trips(models.Model):
-    pass
+    id = models.IntegerField(primary_key=True)
+    location = models.CharField(max_length=50)
 
 
 class Notifications(models.Model):
-    pass
+    text = models.CharField(max_length=200)
 
 
 class UserSettings(models.Model):
-    pass
-
-
-class ProfilePicture(models.Model):
-    pass
+    profile_picture = models.ImageField()

@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^mytrips/', views.TripsList.as_view(), name='trips_list'),
     url(r'^mytrips/create/', views.CreateTrip.as_view(), name='create_trip'),
     url(r'^mytrips/trip/$', views.TripsDetailed.as_view(), name='trips_detailed'),
-    url(r'^calendar/$', views.CalendarView.as_view(), name='calendar')
+    url(r'^calendar/$', views.CalendarView.as_view(), name='calendar'),
 ]

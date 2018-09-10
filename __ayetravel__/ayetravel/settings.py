@@ -92,13 +92,23 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'mydb',
+#         'USER': 'myuser',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/app/'
-LOGOUT_REDIRECT_URL = '/account/login'
+LOGOUT_REDIRECT_URL = '/account/login/'
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
@@ -144,7 +154,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    'C:\\Users\\Ryan\\PycharmProjects\\ayetravel\\static',
+    'C:\\Users\\Ryan\\PycharmProjects\\ayetravel\\__ayetravel__\\static',
 ]
 
 # Media
@@ -168,3 +178,5 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
 # CSRF_COOKIE_SECURE = True
 
 # PREPEND_WWW = True
+
+CSRF_FAILURE_VIEW = '/templates/500.html'

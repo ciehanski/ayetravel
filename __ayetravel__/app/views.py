@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
+    context_object_name = 'index'
     template = '../../app/templates/app/index.html'
 
     def get(self, request, *args, **kwargs):
@@ -11,6 +12,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 
 class TripsList(LoginRequiredMixin, TemplateView):
+    context_object_name = 'trips_list'
     template = '../../app/templates/app/trips_list.html'
 
     def get(self, request, *args, **kwargs):
@@ -18,13 +20,15 @@ class TripsList(LoginRequiredMixin, TemplateView):
 
 
 class TripsDetailed(LoginRequiredMixin, TemplateView):
+    context_object_name = 'trips_detailed'
     template = '../../app/templates/app/trips_detailed.html'
 
     def get(self, request, *args, **kwargs):
         return render(request, '../../app/templates/app/trips_detailed.html')
 
 
-class CreateTrip(LoginRequiredMixin, TemplateView):
+class CreateTrip(LoginRequiredMixin, FormView):
+    context_object_name = 'create_trip'
     template = '../../app/templates/app/create_trip.html'
 
     def get(self, request, *args, **kwargs):
@@ -32,6 +36,7 @@ class CreateTrip(LoginRequiredMixin, TemplateView):
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
+    context_object_name = 'calendar'
     template = '../../app/templates/app/calendar.html'
 
     def get(self, request, *args, **kwargs):
