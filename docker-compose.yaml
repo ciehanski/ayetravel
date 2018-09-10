@@ -2,21 +2,22 @@ version: '3'
 services:
   cache:
      image: memcached
-     container_name: memcached
+     container_name: ayetravel_cache
      restart: always
   db:
-     image: posgresql
-     container_name: postgres_db
+     image: postgres
+     container_name: ayetravel_db
      restart: always
      environment:
-        - MYSQL_ROOT_PASSWORD="secret"
+        POSTGRES_PASSWORD: secret
   web:
-     image: nginx
+     image: ciehanski/ayetravel
      build: ./webapp
      depends_on:
         - db
         - cache
-     container_name: nginx_rp
+     container_name: ayetravel_frontend
      restart: always
      ports:
         - "8080:80"
+     command: bash -c "python manage.py migrate && python manage.py makemigrations && python manage.py migrate && python manage.py runserver"
