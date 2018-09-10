@@ -8,9 +8,10 @@ services:
 env:
   - DJANGO=2.1.1 DB=sqlite3
 install:
+  - sudo apt-get install python3-dev
   - pip install -r requirements.txt
 before_script:
   # - postgres -e 'create database test;' -u root
+  - cd $TRAVIS_BUILD_DIR/__ayetravel__
 script:
-  - python __ayetravel__/manage.py test
-
+  - gunicorn ayetravel.wsgi
