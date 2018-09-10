@@ -9,4 +9,4 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["python __ayetravel__/manage.py test"]
