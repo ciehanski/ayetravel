@@ -12,5 +12,4 @@ install:
 before_script:
   # - postgres -e 'create database test;' -u root
 script:
-  - python __ayetravel__/manage.py test
-
+  - gunicorn ayetravel.wsgi
