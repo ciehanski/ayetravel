@@ -14,4 +14,5 @@ before_script:
   # - postgres -e 'create database test;' -u root
   - cd $TRAVIS_BUILD_DIR/__ayetravel__
 script:
-  - gunicorn ayetravel.wsgi
+  #- gunicorn ayetravel.wsgi
+  - python manage.py test
