@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% load static %}
+
+{% block title_block %}
+    ayetravel - My Calendar
+{% endblock %}
+
 {% block body_block %}
                     <!-- Start Content-->
                     <div class="container-fluid">
@@ -10,8 +16,7 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                                            <li class="breadcrumb-item"><a href="{% url "app:index" %}">Dashboard</a></li>
                                             <li class="breadcrumb-item active">Calendar</li>
                                         </ol>
                                     </div>

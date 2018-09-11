@@ -14,4 +14,4 @@ class CreateTripForm(forms.ModelForm):
 
     class Meta:
         model = Trips
-        exclude = ['owner']
+        exclude = ['user']

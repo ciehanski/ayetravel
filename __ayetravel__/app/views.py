@@ -53,7 +53,7 @@ class UpdateTrip(LoginRequiredMixin, UpdateView):
     context_object_name = 'update_trip'
     template_name = '../../app/templates/app/create_trip.html'
     model = Trips
-    fields = ['user_location', 'date', 'budget', 'participants']
+    fields = '__all__'
 
 
 class DeleteTrip(LoginRequiredMixin, DeleteView):
@@ -61,6 +61,9 @@ class DeleteTrip(LoginRequiredMixin, DeleteView):
     template_name = '../../app/templates/app/create_trip.html'
     model = Trips
     success_url = reverse_lazy('app:trips_list')
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
