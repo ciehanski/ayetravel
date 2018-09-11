@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body_block %}
-{% if trip.owner.get_username == user.get_username %}
+{#{% if trips_detailed.owner.get_username == user.get_username %}#}
                     <!-- Start Content-->
                     <div class="container-fluid">
                         
@@ -254,9 +254,9 @@
                         <!-- end row -->
                         
                     </div> <!-- container -->
-{% else %}
+{#{% else %}#}
 
-    <p>This isn't your trip!</p>
+{#    <p>This isn't your trip!</p>#}
 
-{% endif %}
+{#{% endif %}#}
 {% endblock %}
