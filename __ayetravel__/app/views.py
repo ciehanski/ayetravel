@@ -4,17 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from app.models import Trips, TravelLogs
 from app.forms import CreateTripForm
 from django.urls import reverse_lazy
-import airbnb
 
 
 class IndexView(LoginRequiredMixin, ListView):
     context_object_name = 'index'
     template_name = '../../app/templates/app/index.html'
     model = Trips
-
-    # def get(self, request, *args, **kwargs):
-    #     airbnb_listings = airbnb.main('-asa', 'Indianapolis')
-    #     return airbnb_listings
 
 
 class TravelLogList(LoginRequiredMixin, ListView):
