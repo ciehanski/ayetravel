@@ -26,7 +26,7 @@
                             <!-- Logo -->
                             <div class="card-header pt-4 pb-4 text-center bg-primary">
                                 <a href="">
-                                    <span><img src="{% static "app/img/logo.png" %}" alt="" height="90"></span>
+                                    <span><img src="{% static "app/img/logo.png" %}" alt="" height="75"></span>
                                 </a>
                             </div>
 
@@ -35,29 +35,6 @@
                                 <form action="." method="POST">
 
                                     {% csrf_token %}
-
-                                    <div class="form-group">
-                                        <label for="username_textbox">Username</label>
-                                        {{ form.username_textbox }}
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="password_textbox">Password</label>
-                                        <a href="{% url "login:recovery" %}" class="text-muted float-right" tabindex="-1"><small>Forgot your password?</small></a>
-                                        {{ form.password_textbox }}
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <div class="custom-control custom-checkbox">
-                                            {{ form.remember_me_checkbox }}
-                                            <label class="custom-control-label" for="checkbox-signin">Remember me</label>
-                                        </div>
-                                    </div>
-                                    <center><div class="g-recaptcha" data-sitekey="6Lcxam4UAAAAAOx-9RWDxhalnW1ZIPzoQU5x4M9x"></div></center>
-                                    </br>
-                                    <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-primary" type="submit"> Log In </button>
-                                    </div>
 
                                     {% if form.errors %}
                                         {% for field in form %}
@@ -73,6 +50,31 @@
                                             {% endfor %}
                                         {% endfor %}
                                     {% endif %}
+
+                                    <div class="form-group">
+                                        <label for="username_textbox">Username</label>
+                                        {{ form.username_textbox }}
+                                        {{ form.username_textbox.errors }}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="password_textbox">Password</label>
+                                        <a href="{% url "login:recovery" %}" class="text-muted float-right" tabindex="-1"><small>Forgot your password?</small></a>
+                                        {{ form.password_textbox }}
+                                        {{ form.password_textbox.errors }}
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <div class="custom-control custom-checkbox">
+                                            {{ form.remember_me_checkbox }}
+                                            <label class="custom-control-label" for="checkbox-signin">Remember me</label>
+                                        </div>
+                                    </div>
+                                    <center><div class="g-recaptcha" data-sitekey="6Lcxam4UAAAAAOx-9RWDxhalnW1ZIPzoQU5x4M9x"></div></center>
+                                    </br>
+                                    <div class="form-group mb-0 text-center">
+                                        <button class="btn btn-primary" type="submit"> Log In </button>
+                                    </div>
 
                                 </form>
                             </div> <!-- end card-body -->

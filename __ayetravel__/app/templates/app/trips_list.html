@@ -53,13 +53,14 @@
                         <!-- end row-->
 
                         <div class="row">
+                            {% for trip in trips_list %}
+                            {% if trip.user.get_username == user.get_username %}
                             <div class="col-md-6 col-xl-3">
                                 <!-- project card -->
-                                {% for trip in trips_list %}
                                 <div class="card d-block">
                                     <div class="card-body">
                                         <div class="dropdown card-widgets">
-                                            <a href="javascript:void(0);" class="dropdown-toggle arrow-none" data-toggle="dropdown" aria-expanded="false">
+                                            <a href="{{ trip.id }}" class="dropdown-toggle arrow-none" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="dripicons-dots-3"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -75,7 +76,7 @@
                                         </div>
                                         <!-- project title-->
                                         <h4 class="mt-0">
-                                            <a href="javascript:void(0);" class="text-dark">{{ trip.name }}</a>
+                                            <a href="{{ trip.id }}" class="text-dark">{{ trip.name }}</a>
                                         </h4>
                                         <div class="badge badge-success mb-3">Finished</div>
 
@@ -122,9 +123,9 @@
                                     </ul>
                                 </div> <!-- end card-->
                             </div> <!-- end col -->
+                            {% endif %}
+                            {% endfor %}
                         </div>
-
-                        {% endfor %}
                         <!-- end row-->
                         
                     </div> <!-- container -->

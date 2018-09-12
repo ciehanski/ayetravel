@@ -179,4 +179,4 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
 
 # PREPEND_WWW = True
 
-CSRF_FAILURE_VIEW = '/templates/500.html'
+CSRF_FAILURE_VIEW = "../templates/500.html"

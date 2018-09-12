@@ -2,7 +2,12 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title_block %}
+    ayetravel - My Trips - {{ trips_detailed.name }}
+{% endblock %}
+
 {% block body_block %}
+{% if trips_detailed.user.get_username == user.get_username or trips_detailed.public == True %}
                     <!-- Start Content-->
                     <div class="container-fluid">
                         
@@ -249,6 +254,10 @@
                         <!-- end row -->
                         
                     </div> <!-- container -->
+{#{% else %}#}
 
-
+{#    <p>This isn't your trip!</p>#}
+{% else %}
+    <p>This is a private trip which you do not have permissions to view.</p>
+{% endif %}
 {% endblock %}
