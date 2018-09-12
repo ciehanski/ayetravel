@@ -54,12 +54,14 @@
                                     <div class="form-group">
                                         <label for="username_textbox">Username</label>
                                         {{ form.username_textbox }}
+                                        {{ form.username_textbox.errors }}
                                     </div>
 
                                     <div class="form-group">
                                         <label for="password_textbox">Password</label>
                                         <a href="{% url "login:recovery" %}" class="text-muted float-right" tabindex="-1"><small>Forgot your password?</small></a>
                                         {{ form.password_textbox }}
+                                        {{ form.password_textbox.errors }}
                                     </div>
 
                                     <div class="form-group mb-3">

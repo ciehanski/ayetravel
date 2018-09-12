@@ -115,7 +115,7 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <i class="dripicons-bell noti-icon"></i>
-                                    {% if user.notifications > 0 %}
+                                    {% if notifications > 0 %}
                                     <span class="noti-icon-badge"></span>
                                     {% endif %}
                                 </a>
@@ -134,19 +134,19 @@
 
                                     <div class="slimscroll" style="max-height: 230px;">
 
-                                    {% for notification in notifications %}
-                                    {% if notification.owner.get_username == user.get_username %}
+{#                                    {% for notif in user.usernotifications %}#}
+{#                                    {% if notification.user.get_username == user.get_username %}#}
                                         <!-- item-->
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                                             <div class="notify-icon bg-primary">
                                                 <i class="mdi mdi-comment-account-outline"></i>
                                             </div>
-                                            <p class="notify-details">{{ notficiation.message }}
-                                                <small class="text-muted">{{ notification.timestamp }}</small>
+                                            <p class="notify-details">{{ notif.usernotifications.message }}
+                                                <small class="text-muted">{{ notif.usernotifications.timestamp }}</small>
                                             </p>
                                         </a>
-                                    {% endif %}
-                                    {% endfor %}
+{#                                    {% endif %}#}
+{#                                    {% endfor %}#}
 
                                     </div>
 
@@ -162,7 +162,7 @@
                                 <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                                     aria-expanded="false">
                                     <span class="account-user-avatar">
-                                        <img src="{{ user.profile_picture.image.url }}" alt="user-image" class="rounded-circle">
+                                        <img src="{{ user.usersettings.profile_picture.url }}" alt="user-image" class="rounded-circle">
                                     </span>
                                     <span>
                                         <span class="account-user-name">{{ user.get_short_name }}</span>

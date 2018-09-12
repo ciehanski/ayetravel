@@ -53,10 +53,10 @@
                         <!-- end row-->
 
                         <div class="row">
+                            {% for trip in trips_list %}
+                            {% if trip.user.get_username == user.get_username %}
                             <div class="col-md-6 col-xl-3">
                                 <!-- project card -->
-                                {% for trip in trips_list %}
-                                {% if trip.user.get_username == user.get_username %}
                                 <div class="card d-block">
                                     <div class="card-body">
                                         <div class="dropdown card-widgets">
@@ -123,9 +123,9 @@
                                     </ul>
                                 </div> <!-- end card-->
                             </div> <!-- end col -->
+                            {% endif %}
+                            {% endfor %}
                         </div>
-                        {% endif %}
-                        {% endfor %}
                         <!-- end row-->
                         
                     </div> <!-- container -->

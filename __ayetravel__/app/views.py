@@ -6,10 +6,14 @@ from app.forms import CreateTripForm
 from django.urls import reverse_lazy
 
 
-class IndexView(LoginRequiredMixin, ListView):
+class IndexView(LoginRequiredMixin, TemplateView):
     context_object_name = 'index'
     template_name = '../../app/templates/app/index.html'
-    model = Trips
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['trips'] = Trips.objects.all()
+        return context
 
 
 class TravelLogList(LoginRequiredMixin, ListView):
@@ -66,7 +70,7 @@ class DeleteTrip(LoginRequiredMixin, DeleteView):
         pass
 
 
-class CalendarView(LoginRequiredMixin, TemplateView):
+class CalendarView(LoginRequiredMixin, DetailView):
     context_object_name = 'calendar'
     template_name = '../../app/templates/app/calendar.html'
 
