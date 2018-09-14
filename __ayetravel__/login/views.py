@@ -52,16 +52,20 @@ class LoginView(FormView):
                         return HttpResponseRedirect(reverse('app:index'))
                     else:
                         # Account not active
-                        return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
+                        return render(request, '../../login/templates/login/login.html', {'form': self.login_form,
+                                                                                          'error': 'Account not active.'})
                 else:
                     # Not a valid user
-                    return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
+                    return render(request, '../../login/templates/login/login.html', {'form': self.login_form,
+                                                                                      'error': 'Not a valid user.'})
             else:
                 # recaptcha not completed or botcatcher textbox filled out - we have a bot
-                return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
+                return render(request, '../../login/templates/login/login.html', {'form': self.login_form,
+                                                                                  'error': 'Please complete recaptcha.'})
         else:
             # Empty response
-            return render(request, '../../login/templates/login/login.html', {'form': self.login_form})
+            return render(request, '../../login/templates/login/login.html', {'form': self.login_form,
+                                                                              'error': 'Empty response, please try refreshing your browser.'})
 
 
 class LogoutView(LoginRequiredMixin, TemplateView):

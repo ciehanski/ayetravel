@@ -54,7 +54,7 @@
 
                         <div class="row">
                             {% for trip in trips_list %}
-                            {% if trip.user.get_username == user.get_username %}
+                            {% if trip.user_id.get_username == user.get_username %}
                             <div class="col-md-6 col-xl-3">
                                 <!-- project card -->
                                 <div class="card d-block">

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login',
     'app',
+    'community',
 ]
 
 MIDDLEWARE = [
@@ -95,9 +96,9 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'mydb',
-#         'USER': 'myuser',
-#         'PASSWORD': 'password',
+#         'NAME': 'ayetravel',
+#         'USER': 'ayetravel_db_admin',
+#         'PASSWORD': 'ayetravel',
 #         'HOST': 'localhost',
 #         'PORT': '',
 #     }

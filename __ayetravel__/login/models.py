@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse
-import datetime
+from app.models import Trips
 
 
 class UserSettings(models.Model):
@@ -17,13 +16,13 @@ class UserSettings(models.Model):
         verbose_name_plural = 'usersettings'
 
     def __str__(self):
-        return f'User settings for {str(self.user_id.get_username())}'
+        return f'User settings for {self.user_id.get_username()}'
 
 
 class UserNotifications(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE, default='')
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=200, blank=True)
-    timestamp = models.DateTimeField(default=datetime.datetime.now(), editable=False)
+    timestamp = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'notification'
@@ -31,6 +30,3 @@ class UserNotifications(models.Model):
 
     def __str__(self):
         return str('"' + self.message + '"' + ' for the user: ' + self.user_id.get_username())
-
-    def get_absolute_url(self):
-        return reverse('login:index', kwargs={'pk': self.pk})

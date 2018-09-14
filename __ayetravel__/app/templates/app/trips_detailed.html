@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body_block %}
-{% if trips_detailed.user.get_username == user.get_username or trips_detailed.public == True %}
+{% if trips_detailed.user_id.get_username == user.get_username or trips_detailed.public == True %}
                     <!-- Start Content-->
                     <div class="container-fluid">
                         

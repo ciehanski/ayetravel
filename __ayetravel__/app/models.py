@@ -1,16 +1,15 @@
 from django.db import models
 from django.urls import reverse
-import datetime
 from django.contrib.auth.models import User
 
 
 class Trips(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
     user_location = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=50, blank=True)
     destination = models.CharField(max_length=100, blank=True)
-    start_date = models.DateField(str(datetime.date.today()))
-    end_date = models.DateField(str(datetime.date.today()))
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     budget = models.IntegerField()
     participants = models.IntegerField()
     picture = models.ImageField(upload_to='trip_pictures', blank=True, null=True)
@@ -21,19 +20,19 @@ class Trips(models.Model):
         verbose_name_plural = 'trips'
 
     def __str__(self):
-        return str('Trip ID: ' + self.pk + ' made by user ' + str(self.user.get_username()))
+        return str(f'Trip ID: ' + str(self.pk) + ' "' + self.name + '"' + ' made by ' + str(self.user_id.get_username()))
 
     def get_absolute_url(self):
         return reverse('app:trips_detailed', kwargs={'pk': self.pk})
 
 
 class TravelLogs(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_location = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=50, blank=True)
     destination = models.CharField(max_length=100, blank=True)
-    start_date = models.DateField(str(datetime.date.today()))
-    end_date = models.DateField(str(datetime.date.today()))
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     budget = models.IntegerField(default=0)
     participants = models.IntegerField(default=1)
     picture = models.ImageField(upload_to='travellog_pictures', blank=True, null=True)

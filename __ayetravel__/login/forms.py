@@ -16,7 +16,7 @@ class LoginForm(forms.Form):
                                  widget=forms.HiddenInput(
                                      attrs={'name': 'botcatcher',
                                             'id': 'botcatcher',
-                                           }))
+                                            }))
 
     password_textbox = forms.CharField(max_length=60, required=True, label='Password',
                                widget=forms.PasswordInput(

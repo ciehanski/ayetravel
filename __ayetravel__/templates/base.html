@@ -79,6 +79,14 @@
                             </a>
                         </li>
 
+                        <li class="side-nav-item">
+                            <a href="{% url "app:community_list" %}" class="side-nav-link">
+                                <i class="dripicons-calendar"></i>
+                                <span> Community </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                        </li>
+
                     </ul>
 
                     <!-- Help Box -->
@@ -115,8 +123,8 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <i class="dripicons-bell noti-icon"></i>
-                                    {% if notifications > 0 %}
-                                    <span class="noti-icon-badge"></span>
+                                    {% if notifs_total > 0 %}
+                                        <span class="noti-icon-badge"></span>
                                     {% endif %}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-lg">
@@ -134,19 +142,21 @@
 
                                     <div class="slimscroll" style="max-height: 230px;">
 
-{#                                    {% for notif in user.usernotifications %}#}
-{#                                    {% if notification.user.get_username == user.get_username %}#}
+                                    {% if notifs_total > 0 %}
+                                    {% for notif in notifs %}
                                         <!-- item-->
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                                             <div class="notify-icon bg-primary">
                                                 <i class="mdi mdi-comment-account-outline"></i>
                                             </div>
-                                            <p class="notify-details">{{ notif.usernotifications.message }}
-                                                <small class="text-muted">{{ notif.usernotifications.timestamp }}</small>
+                                            <p class="notify-details">{{ notif.message }}
+                                                <small class="text-muted">{{ notif.timestamp }}</small>
                                             </p>
                                         </a>
-{#                                    {% endif %}#}
-{#                                    {% endfor %}#}
+                                    {% endfor %}
+                                    {% else %}
+                                        <p>No notifications.</p>
+                                    {% endif %}
 
                                     </div>
 
@@ -218,8 +228,7 @@
                     <!-- Start Content-->
                     <div class="container-fluid">
 
-                        {% block body_block %}
-                        {% endblock %}
+                        {% block body_block %}{% endblock %}
 
                     </div>
 
@@ -263,40 +272,6 @@
             </div>
 
             <div class="slimscroll-menu">
-
-                <!-- Settings -->
-                <hr class="mt-0" />
-                <h5 class="pl-3">Basic Settings</h5>
-                <hr class="mb-0" />
-
-                <div class="p-3">
-                    <div class="custom-control custom-checkbox mb-2">
-                        <input type="checkbox" class="custom-control-input" id="notifications-check" checked>
-                        <label class="custom-control-label" for="notifications-check">Notifications</label>
-                    </div>
-
-                    <div class="custom-control custom-checkbox mb-2">
-                        <input type="checkbox" class="custom-control-input" id="api-access-check">
-                        <label class="custom-control-label" for="api-access-check">API Access</label>
-                    </div>
-
-                    <div class="custom-control custom-checkbox mb-2">
-                        <input type="checkbox" class="custom-control-input" id="auto-updates-check" checked>
-                        <label class="custom-control-label" for="auto-updates-check">Auto Updates</label>
-                    </div>
-
-                    <div class="custom-control custom-checkbox mb-2">
-                        <input type="checkbox" class="custom-control-input" id="online-status-check" checked>
-                        <label class="custom-control-label" for="online-status-check">Online Status</label>
-                    </div>
-
-                    <div class="custom-control custom-checkbox mb-2">
-                        <input type="checkbox" class="custom-control-input" id="auto-payout-check">
-                        <label class="custom-control-label" for="auto-payout-check">Auto Payout</label>
-                    </div>
-
-                </div>
-
 
                 <!-- Timeline -->
                 <hr class="mt-0" />
@@ -380,8 +355,7 @@
         <script src="{% static "app/js/vendor/jquery-jvectormap-world-mill-en.js" %}"></script>
         <!-- third party js ends -->
 
-        {% block scipts_block %}
-        {% endblock %}
+        {% block scipts_block %}{% endblock %}
 
         <!-- demo app -->
         <script src="{% static "app/js/pages/demo.dashboard.js" %}"></script>
