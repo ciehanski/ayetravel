@@ -15,7 +15,6 @@ before_script:
   - sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ayetravel TO ayetravel_db_admin;"
   - sudo -u postgres psql -c "ALTER ROLE ayetravel_db_admin SET client_encoding TO 'utf8';"
   - sudo -u postgres psql -c "ALTER ROLE ayetravel_db_admin SET timezone TO 'UTC';"
-  - systemctl start postgresql
   - python -m venv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
