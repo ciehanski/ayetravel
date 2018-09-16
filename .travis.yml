@@ -17,8 +17,8 @@ before_script:
   - python3 -m venv venv
   - source venv/bin/activate
   - python3 -m pip install -r requirements.txt
-  - cp $TRAVIS_BUILD_DIR/ayetravel-travis.conf /etc/nginx/sites-available/ayetravel-travis.conf
-  - cd $TRAVIS_BUILD_DIR/__ayetravel__
+  - sudo cp ciehanski/ayetravel/ayetravel-travis.conf /etc/nginx/sites-available/ayetravel-travis.conf
+  - cd ciehanski/ayetravel/__ayetravel__
   - python3 manage.py makemigrations
   - python3 manage.py migrate
 script:
