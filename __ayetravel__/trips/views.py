@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
 from trips.models import Trips
@@ -13,16 +13,25 @@ class TripsDetailed(LoginRequiredMixin, DetailView):
 
     def get(self, request, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['community_trips'] = render_community_trips()
-        context['trips'] = render_user_trips(request)
+        context['community_trips'] = render_community_trips(request)
+        context['trips'] = self.clean_object(request)
         context['notifs'] = render_user_notifications(request)
         context['trips_total'] = len(render_user_trips(request))
         context['notifs_total'] = len(render_user_notifications(request))
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)
 
     def get_object(self, queryset=Trips):
-        id_ = self.kwargs.get('id')
-        return get_object_or_404(Trips, id=id_)
+        slug_ = self.kwargs.get('slug')
+        return get_object_or_404(Trips, slug=slug_)
+
+    def clean_object(self, request):
+        slug_ = self.kwargs.get('slug')
+        obj = self.get_object()
+        if obj.user_id.get_username() == request.user.get_username() or obj.public:
+            return get_object_or_404(Trips, slug=slug_)
+        else:
+            return render(request, 'app/500.html', {'error': 'This is a private trip which you '
+                                                             'do not have permissions to view.'})
 
 
 class CreateTrip(LoginRequiredMixin, CreateView):
@@ -34,16 +43,13 @@ class CreateTrip(LoginRequiredMixin, CreateView):
 
     def get(self, request, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['community_trips'] = render_community_trips()
-        context['trips'] = render_user_trips(request)
         context['notifs'] = render_user_notifications(request)
-        context['trips_total'] = len(render_user_trips(request))
         context['notifs_total'] = len(render_user_notifications(request))
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)
 
     def get_object(self, queryset=Trips):
-        id_ = self.kwargs.get('id')
-        return get_object_or_404(Trips, id=id_)
+        slug_ = self.kwargs.get('slug')
+        return get_object_or_404(Trips, slug=slug_)
 
     def form_valid(self, form):
         form.save()
@@ -58,16 +64,14 @@ class UpdateTrip(LoginRequiredMixin, UpdateView):
 
     def get(self, request, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['community_trips'] = render_community_trips()
-        context['trips'] = render_user_trips(request)
+        context['trips'] = self.get_object()
         context['notifs'] = render_user_notifications(request)
-        context['trips_total'] = len(render_user_trips(request))
         context['notifs_total'] = len(render_user_notifications(request))
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)
 
     def get_object(self, queryset=Trips):
-        id_ = self.kwargs.get('id')
-        return get_object_or_404(Trips, id=id_)
+        slug_ = self.kwargs.get('slug')
+        return get_object_or_404(Trips, slug=slug_)
 
     def form_valid(self, form):
         form.save()
@@ -80,9 +84,9 @@ class DeleteTrip(LoginRequiredMixin, DeleteView):
     model = Trips
     success_url = reverse_lazy('app:trips_list')
 
-    def get_object(self, queryset=None):
-        id_ = self.kwargs.get('id')
-        return get_object_or_404(Trips, id=id_)
+    def get_object(self, queryset=Trips):
+        slug_ = self.kwargs.get('slug')
+        return get_object_or_404(Trips, slug=slug_)
 
     def post(self, request, *args, **kwargs):
         pass
@@ -96,9 +100,8 @@ class TripsList(LoginRequiredMixin, ListView):
     def get(self, request, **kwargs):
         self.object_list = render_user_trips(request)
         context = super().get_context_data(**kwargs)
-        context['community_trips'] = render_community_trips()
         context['trips'] = render_user_trips(request)
         context['notifs'] = render_user_notifications(request)
         context['trips_total'] = len(render_user_trips(request))
         context['notifs_total'] = len(render_user_notifications(request))
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)

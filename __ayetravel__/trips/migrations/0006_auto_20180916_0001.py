@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='trips',
-            name='participants',
+            name='participants_total',
             field=models.IntegerField(default=1),
         ),
         migrations.AlterField(

@@ -68,7 +68,7 @@ class LoginView(FormView):
                                                            'error': 'Empty response, please refresh your browser.'})
 
 
-class LogoutView(LoginRequiredMixin, RedirectView):
+class LogoutView(LoginRequiredMixin, TemplateView):
     context_object_name = 'logout'
     template_name = 'accounts/logout.html'
 

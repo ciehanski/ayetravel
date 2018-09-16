@@ -15,7 +15,7 @@ class TravelLogs(models.Model):
     end_date = models.DateField(blank=True, null=True)
     budget = models.IntegerField(default=0)
     participants = models.IntegerField(default=1)
-    picture = models.ImageField(upload_to='travellog_pictures', blank=True, null=True)
+    picture = models.ImageField(upload_to='trips/travellog_pictures', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

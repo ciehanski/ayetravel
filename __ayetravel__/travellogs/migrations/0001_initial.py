@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('start_date', models.DateField(blank=True, null=True)),
                 ('end_date', models.DateField(blank=True, null=True)),
                 ('budget', models.IntegerField(default=0)),
-                ('participants', models.IntegerField(default=1)),
+                ('participants_total', models.IntegerField(default=1)),
                 ('picture', models.ImageField(blank=True, null=True, upload_to='travellog_pictures')),
                 ('user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

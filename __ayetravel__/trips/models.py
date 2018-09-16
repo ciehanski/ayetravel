@@ -14,14 +14,16 @@ class Trips(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     budget = models.IntegerField(default=0)
-    participants = models.IntegerField(default=1)
-    picture = models.ImageField(upload_to='trip_pictures', blank=True, null=True)
+    participants_total = models.IntegerField(default=1)
+    comments_total = models.IntegerField(default=0)
+    picture = models.ImageField(upload_to='trips/trip_pictures', blank=True, null=True)
     public = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
     pins = models.IntegerField(default=0)
     packing_list = models.TextField(blank=True, max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+    files = models.FilePathField(path='trips/trip_files', null=True, blank=True)
 
     class Meta:
         verbose_name = 'trip'
@@ -38,6 +40,34 @@ class Trips(models.Model):
 
     def get_absolute_url(self):
         return reverse('app:trips_detailed', kwargs={'slug': self.slug})
+
+
+class Comments(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
+    message = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'comment'
+        verbose_name_plural = 'comments'
+
+    def __str__(self):
+        return str(f'Comment ID: ' + str(self.pk) + ' "' + self.message + '"' + ' created by '
+                   + str(self.user_id.get_username()) + ' left on Trip ID: ' + self.trip.pk)
+
+
+class Participants(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'participant'
+        verbose_name_plural = 'participants_total'
+
+    # def __str__(self):
+    #     return str(f'Comment ID: ' + str(self.pk) + ' "' + self.message + '"' + ' created by '
+    #                + str(self.user_id.get_username()) + ' left on Trip ID: ' + self.trip.pk)
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):

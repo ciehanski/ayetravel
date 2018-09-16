@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('start_date', models.DateField(blank=True, null=True)),
                 ('end_date', models.DateField(blank=True, null=True)),
                 ('budget', models.IntegerField(default=0)),
-                ('participants', models.IntegerField(default=0)),
+                ('participants_total', models.IntegerField(default=0)),
                 ('picture', models.ImageField(blank=True, null=True, upload_to='trip_pictures')),
                 ('public', models.BooleanField(default=False)),
                 ('likes', models.IntegerField(default=0)),

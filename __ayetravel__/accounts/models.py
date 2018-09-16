@@ -35,14 +35,14 @@ class UserNotifications(models.Model):
 
     # TODO build out notification system
     def create_notification(self, instance, message):
-        new_notif = UserNotifications.objects.create(user_id=instance, message=message)
-        return new_notif
+        UserNotifications.objects.create(user_id=instance, message=message).save()
 
     def read_notification(self):
         self.read = True
+        self.save()
 
-    def delete_notification(self, instance, message, timestamp):
-        UserNotifications.objects.delete(user_id=instance, message=message, timestamp=timestamp)
+    def delete_notification(self, id_):
+        UserNotifications.objects.delete(id=id_).save()
 
     def __str__(self):
         return str('"' + self.message + '"' + ' for the user: ' + self.user_id.get_username())
@@ -51,7 +51,7 @@ class UserNotifications(models.Model):
 @receiver(post_save, sender=User)
 def create_userprofile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user_id=instance)
+        UserProfile.objects.create(user_id=instance, receive_emails=True)
 
 
 @receiver(post_save, sender=User)
