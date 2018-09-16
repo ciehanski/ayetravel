@@ -19,6 +19,7 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+# TODO change secret key before deployment
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'j8sd+7vjbt^oc_8cxs*acf$ak8(5da)(67ht$(pu1_wy-iv^#)'
 
@@ -37,8 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login',
+    'accounts',
     'app',
+    'trips',
+    'travellogs',
+    'community',
 ]
 
 MIDDLEWARE = [
@@ -99,16 +103,16 @@ DATABASES = {
 #         'USER': 'ayetravel_db_admin',
 #         'PASSWORD': 'ayetravel',
 #         'HOST': 'localhost',
-#         'PORT': '',
+#         'PORT': '5432',
 #     }
 # }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/account/accounts/'
 LOGIN_REDIRECT_URL = '/app/'
-LOGOUT_REDIRECT_URL = '/account/login/'
+LOGOUT_REDIRECT_URL = '/account/accounts/'
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
@@ -179,4 +183,4 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
 
 # PREPEND_WWW = True
 
-CSRF_FAILURE_VIEW = "../templates/500.html"
+CSRF_FAILURE_VIEW = "app/500.html"

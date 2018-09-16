@@ -42,10 +42,9 @@ Vagrant.configure("2") do |config|
     sudo cp /vagrant/ayetravel-nginx.conf /etc/nginx/sites-available/ayetravel-nginx.conf
     # Migrate database
     cd /vagrant/__ayetravel__
-    sudo python3 manage.py migrate
     sudo python3 manage.py makemigrations
     sudo python3 manage.py migrate
-    sudo python3 manage.py collectstatic
+    # sudo python3 manage.py collectstatic
     # start nginx
     sudo systemctl start nginx
     # start gunicorn
