@@ -16,7 +16,7 @@ before_script:
   - sudo -u postgres psql -c "ALTER ROLE ayetravel_db_admin SET timezone TO 'UTC';"
   - python3 -m venv venv
   - source venv/bin/activate
-  - pip install -r requirements.txt
+  - python3 -m pip install -r requirements.txt
   - cp $TRAVIS_BUILD_DIR/ayetravel-travis.conf /etc/nginx/sites-available/ayetravel-travis.conf
   - cd $TRAVIS_BUILD_DIR/__ayetravel__
   - python3 manage.py makemigrations
