@@ -48,6 +48,33 @@ class UserNotifications(models.Model):
         return str('"' + self.message + '"' + ' for the user: ' + self.user_id.get_username())
 
 
+class UserCalendar(models.Model):
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'usercalendar'
+        verbose_name_plural = 'usercalendars'
+
+    def __str__(self):
+        return f'Calendar data for the user: {self.user_id.get_username()}'
+
+
+@receiver(post_save, sender=User)
+def create_usercalendar(sender, instance, created, **kwargs):
+    if created:
+        UserCalendar.objects.create(user_id=instance)
+
+
+@receiver(post_save, sender=User)
+def save_usercalendar(sender, instance, **kwargs):
+    instance.usercalendar.save()
+
+
+@receiver(post_save, sender=User)
+def delete_usercalendar(sender, instance, **kwargs):
+    instance.usercalendar.delete()
+
+
 @receiver(post_save, sender=User)
 def create_userprofile(sender, instance, created, **kwargs):
     if created:

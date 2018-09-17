@@ -27,5 +27,5 @@ urlpatterns = [
     path('', include('app.urls', namespace='app'), name='app'),
     path('accounts/', include('accounts.urls', namespace='accounts'), name='accounts'),
     path('my/trips/', include('trips.urls', namespace='trips'), name='trips'),
-    # path('community/', include('community.urls', namespace='community'), name='community'),
+    path('community/', include('community.urls', namespace='community'), name='community'),
 ]

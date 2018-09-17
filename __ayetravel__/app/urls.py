@@ -3,8 +3,6 @@ import travellogs.views
 from app import views
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
-from django.conf.urls import include
 from community.views import CommunityTripsList, CommunityTripsDetailed
 
 # TEMPLATE TAGGING

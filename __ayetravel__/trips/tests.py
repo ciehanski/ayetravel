@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 
+# TODO Write Trips tests
 class TestUrls(TestCase):
 
     def test_detail_url(self):

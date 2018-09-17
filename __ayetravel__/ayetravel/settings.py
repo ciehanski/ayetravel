@@ -110,9 +110,9 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
-LOGIN_URL = '/account/accounts/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/app/'
-LOGOUT_REDIRECT_URL = '/account/accounts/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',

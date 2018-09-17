@@ -22,20 +22,15 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-5">
                         <div class="card">
-
                             <!-- Logo -->
                             <div class="card-header pt-4 pb-4 text-center bg-primary">
                                 <a href="">
                                     <span><img src="{% static "app/img/logo.png" %}" alt="" height="75"></span>
                                 </a>
                             </div>
-
                             <div class="card-body p-4">
-
                                 <form action="." method="POST">
-
                                     {% csrf_token %}
-
                                     {% if form.errors %}
                                         {% for field in form %}
                                             {% for error in field.errors %}
@@ -50,18 +45,17 @@
                                             {% endfor %}
                                         {% endfor %}
                                     {% endif %}
-
                                     <div class="form-group">
                                         <label for="username_textbox">Username</label>
                                         {{ form.username_textbox }}
-                                        {{ form.username_textbox.errors }}
+                                        {{ error }}
                                     </div>
 
                                     <div class="form-group">
                                         <label for="password_textbox">Password</label>
                                         <a href="{% url "accounts:recovery" %}" class="text-muted float-right" tabindex="-1"><small>Forgot your password?</small></a>
                                         {{ form.password_textbox }}
-                                        {{ form.password_textbox.errors }}
+                                        {{ form.password_textbox.error }}
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -80,14 +74,12 @@
                             </div> <!-- end card-body -->
                         </div>
                         <!-- end card -->
-
                         <div class="row mt-3">
                             <div class="col-12 text-center">
 {#                                <p class="text-muted">Don't have an account? <a href="register.html" class="text-dark ml-1"><b>Sign Up</b></a></p>#}
                             </div> <!-- end col -->
                         </div>
                         <!-- end row -->
-
                     </div> <!-- end col -->
                 </div>
                 <!-- end row -->

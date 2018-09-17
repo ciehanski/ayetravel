@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, TemplateView
+from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from trips.models import Trips
 from accounts.models import UserNotifications, UserProfile
@@ -32,15 +32,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
             raise ValidationError('Nothing matched your search.')
 
 
-class CalendarView(LoginRequiredMixin, DetailView):
+class CalendarView(LoginRequiredMixin, TemplateView):
     context_object_name = 'calendar'
     template_name = 'app/calendar.html'
-    queryset = []
-
-    # TODO update queryset to calendar obj. Create calendar obj.
-    def get_object(self, queryset=[0]):
-        slug_ = self.kwargs.get('slug')
-        return get_object_or_404(Trips, slug=slug_)
 
 
 def render_user_notifications(request):
