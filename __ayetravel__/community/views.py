@@ -10,7 +10,7 @@ class CommunityTripsList(LoginRequiredMixin, ListView):
     template_name = 'community/community_list.html'
     object_list = Trips.objects.all()
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
         self.object_list = render_community_trips(request)
         context = super().get_context_data(**kwargs)
         context['trips'] = render_user_trips(request)
@@ -24,7 +24,7 @@ class CommunityTripsDetailed(LoginRequiredMixin, DetailView):
     template_name = 'trips/trips_detailed.html'
     object = Trips
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['trips'] = self.get_object()
         context['notifs'] = render_user_notifications(request)

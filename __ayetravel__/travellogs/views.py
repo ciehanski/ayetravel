@@ -10,7 +10,7 @@ class TravelLogList(LoginRequiredMixin, ListView):
     template_name = 'travellogs/travel_log.html'
     object_list = TravelLogs.objects.all()
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['community_trips'] = render_community_trips(request)
         context['trips'] = render_user_trips(request)
