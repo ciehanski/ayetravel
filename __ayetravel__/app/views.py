@@ -10,7 +10,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
     context_object_name = 'index'
     template_name = 'app/index.html'
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['community_trips'] = render_community_trips(request)
         context['trips'] = render_user_trips(request)
