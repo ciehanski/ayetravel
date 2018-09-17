@@ -22,14 +22,13 @@ class LoginView(FormView):
             return render(request, self.template_name, {'form': self.login_form})
 
     def post(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            username_form = request.POST.get('username_textbox')
-            password_form = request.POST.get('password_textbox')
-            remember_me_form = request.POST.get('remember_me_checkbox')
-            botcatcher_form = request.POST.get('botcatcher')
-            user = authenticate(username=username_form, password=password_form)
+        username_form = request.POST.get('username_textbox')
+        password_form = request.POST.get('password_textbox')
+        remember_me_form = request.POST.get('remember_me_checkbox')
+        botcatcher_form = request.POST.get('botcatcher')
 
-            # Begin reCAPTCHA validation
+        # Begin reCAPTCHA validation
+        try:
             recaptcha_response = request.POST.get('g-recaptcha-response')
             url = 'https://www.google.com/recaptcha/api/siteverify'
             values = {
@@ -44,14 +43,28 @@ class LoginView(FormView):
             # response = urllib.request.urlopen(req)
             # result = json.loads(response.read().decode())
             # End reCAPTCHA validation
+        except ValueError:
+            return render(request, self.template_name, {'form': self.login_form,
+                                                        'error': "Couldn't validate your reCAPTCHA form. "
+                                                                 "Please try again."})
 
+        # try to authenticate user
+        try:
+            user = authenticate(username=username_form, password=password_form)
+        except ValueError:
+            return render(request, self.template_name, {'form': self.login_form,
+                                                        'error': "Couldn't authenticate your account. You may be "
+                                                                 "locked out. Please try again in 10 minutes."})
+        else:
             if result['success'] and botcatcher_form is None:
                 if user:
                     if user.is_active:
                         login(request, user)
                         # Handle remember me, don't expire user auth if checked
                         if not request.POST.get(remember_me_form, None):
+                            # if checked, don't expire
                             request.session.set_expiry(0)
+                        # return the redirect of index regardless of remember me checkbox outcome
                         return HttpResponseRedirect(reverse('app:index'))
                     else:
                         # Account not active
@@ -64,11 +77,7 @@ class LoginView(FormView):
             else:
                 # recaptcha not completed or botcatcher textbox filled out - we have a bot
                 return render(request, self.template_name, {'form': self.login_form,
-                                                            'error': 'Please complete recaptcha.'})
-        else:
-            # Empty response
-            return render(request, self.template_name, {'form': self.login_form,
-                                                        'error': 'Empty response, please refresh your browser.'})
+                                                            'error': 'Please complete reCAPTCHA verification.'})
 
 
 class LogoutView(LoginRequiredMixin, TemplateView):
