@@ -1,23 +1,56 @@
 version: '3'
 services:
   cache:
-     image: memcached
+     image: memcached:alpine
+     networks:
+        - cache
      container_name: ayetravel_cache
      restart: always
+
   db:
-     image: postgres
+     image: postgres:alpine
+     volumes:
+         - db_data:/var/lib/postgresql/data
+     networks:
+         - db
      container_name: ayetravel_db
      restart: always
      environment:
-        POSTGRES_PASSWORD: secret
-  web:
-     image: ciehanski/ayetravel
-     build: ./webapp
+        POSTGRES_USER: ayetravel_db_admin
+        POSTGRES_PASSWORD: ayetravel
+        POSTGRES_DB: ayetravel
+
+  backend:
+     image: ciehanski/ayetravel:latest
      depends_on:
         - db
         - cache
-     container_name: ayetravel_frontend
+     networks:
+        - db
+        - web
+        - cache
+     container_name: ayetravel_backend
      restart: always
      ports:
-        - "8080:80"
-     command: bash -c "python manage.py migrate && python manage.py makemigrations && python manage.py migrate && python manage.py runserver"
+        - "8000:8000"
+
+  web:
+     image: nginx:alpine
+     depends_on:
+       - backend
+     volumes:
+       - ./ayetravel-nginx.conf:/etc/nginx/nginx.conf
+     networks:
+       - web
+     container_name: ayetravel_web
+     restart: always
+     ports:
+       - "80:80"
+       - "80:443"
+
+volumes:
+    db_data:
+networks:
+    db:
+    cache:
+    web:

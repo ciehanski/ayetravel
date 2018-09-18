@@ -98,8 +98,8 @@
                                             </span>
                                         </p>
                                         <div>
-                                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_full_name }}" class="d-inline-block">
-                                                <img src="{% static "app/img/users/avatar-6.jpg" %}" class="rounded-circle avatar-xs" alt="friend">
+                                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_username }}" class="d-inline-block">
+                                                <img src="{{ trip.user_id.userprofile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="">
                                             </a>
     
                                             <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty" class="d-inline-block">

@@ -15,6 +15,7 @@ class UserProfile(models.Model):
     age = models.IntegerField(default=0)
     pins = models.IntegerField(default=0)
     private_account = models.BooleanField(default=False)
+    timezone = models.CharField(max_length=5, default='UTC')
 
     class Meta:
         verbose_name = 'userprofile'
@@ -24,7 +25,7 @@ class UserProfile(models.Model):
         if self.profile_picture:
             return self.profile_picture.url
         else:
-            return 'profile_pictures/default.png'
+            return 'media/profile_pictures/default.png'
 
     def __str__(self):
         return f'User profile & settings for the user: {self.user_id.get_username()}'
