@@ -6,8 +6,7 @@
         <meta charset="utf-8" />
         <title>{% block title_block %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-        <meta content="Coderthemes" name="author" />
+        <meta content="A fully featured travel log and planning service." name="ayetravel" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{% static "app/img/favicon.ico" %}">
 
@@ -61,15 +60,6 @@
                                 <span class="menu-arrow"></span>
                             </a>
                         </li>
-
-                        <li class="side-nav-item">
-                            <a href="{% url "app:travel_log_list" %}" class="side-nav-link">
-                                <i class="dripicons-document"></i>
-                                <span> Travel Logs </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                        </li>
-
 
                         <li class="side-nav-item">
                             <a href="{% url "app:calendar" %}" class="side-nav-link">
@@ -134,7 +124,9 @@
                                         <h5 class="m-0">
                                             <span class="float-right">
                                                 <a href="javascript: void(0);" class="text-dark">
+                                                    {% if notifs_total > 0 %}
                                                     <small>Clear All</small>
+                                                    {% endif %}
                                                 </a>
                                             </span>Notifications
                                         </h5>
@@ -159,7 +151,7 @@
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
-                                            No notifications.
+                                            No notifications :(
                                         </div>
                                     {% endif %}
 
@@ -176,7 +168,7 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <span class="account-user-avatar">
-                                        <img src="{{ user.userprofile.profile_picture.url }}" alt="{% static "admin/img/default.png" %}" class="rounded-circle">
+                                        <img src="{{ user.userprofile.get_profile_picture }}" alt="" class="rounded-circle">
                                     </span>
                                     <span>
                                         <span class="account-user-name">{{ user.get_short_name }}</span>
@@ -216,7 +208,7 @@
                             <i class="mdi mdi-menu"></i>
                         </button>
                         <div class="app-search">
-                            <form method="post" action="{% url "trips:trips_list" %}">
+                            <form method="get" action="{% url "app:search" %}">
                                 {% csrf_token %}
                                 <div class="input-group">
                                     <input name="search" type="text" class="form-control" placeholder="Search by trip name...">

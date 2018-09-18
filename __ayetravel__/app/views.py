@@ -3,7 +3,6 @@ from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from trips.models import Trips
 from accounts.models import UserNotifications, UserProfile
-from django.forms import ValidationError
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -17,19 +16,23 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context['notifs'] = render_user_notifications(request)
         context['trips_total'] = len(render_user_trips(request))
         context['notifs_total'] = len(render_user_notifications(request))
-        return render(request, self.template_name, context)
 
-    # TODO fix search function
-    def post(self, request, **kwargs):
-        context = super().get_context_data(**kwargs)
+        # Search handling
         search_term = request.GET.get('search')
-        if search_term != '':
+        if search_term is not None:
             search = Trips.objects.all().filter(name__icontains=search_term)
-            context['search_results'] = search
-            # TODO create search.html
-            return render(request, 'app/search.html', context)
+            if len(search) > 0:
+                trips = []
+                for trip in search:
+                    trips.append(trip)
+                context['search_results'] = trips
+                return render(request, 'app/search.html', context)
+            else:
+                context['error'] = 'Nothing matched your search.'
+                return render(request, 'app/search.html', context)
         else:
-            raise ValidationError('Nothing matched your search.')
+            # if search was blank, just re-render index page
+            return render(request, self.template_name, context)
 
 
 class SearchView(LoginRequiredMixin, ListView):
@@ -38,7 +41,6 @@ class SearchView(LoginRequiredMixin, ListView):
     object_list = Trips.objects.all()
 
     def get(self, request, *args, **kwargs):
-        self.object_list = render_user_trips(request)
         context = super().get_context_data(**kwargs)
         context['trips'] = render_user_trips(request)
         context['notifs'] = render_user_notifications(request)
@@ -71,9 +73,8 @@ def render_user_trips(request):
 def render_user_trip_detail(request):
     trips = []
     for trip in Trips.objects.all():
-        if trip.user_id.get_username() == request.user.get_username():
-            if trip.public:
-                trips.append(trip)
+        if trip.user_id.get_username() == request.user.get_username() or trip.public:
+            trips.append(trip)
     return trips
 
 
@@ -92,8 +93,6 @@ def render_pins(request):
         if pin.user_id.get_username() == request.user.get_username():
             if len(pin.user_id.userprofile.pins) > 0:
                 pins.append(pin)
-            elif len(pin.user_id.userprofile.pins == 0):
-                raise ValidationError('You have no pins!')
     return pins
 
 

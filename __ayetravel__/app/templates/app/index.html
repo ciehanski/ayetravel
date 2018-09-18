@@ -156,7 +156,7 @@
                                     </p>
                                     <div>
                                         <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.get_full_name }}" class="d-inline-block">
-{#                                            <img src="{{ user.userprofile.profile_picture.url }}" class="rounded-circle avatar-xs" alt="friend">#}
+                                            <img src="{{ user.userprofile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="">
                                         </a>
 
                                         <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty" class="d-inline-block">
@@ -223,7 +223,14 @@
                                     <h4 class="mt-0">
                                         <a href="community/trips/{{ trip.slug }}" class="text-dark">{{ trip.name }}</a>
                                     </h4>
-                                    <div class="badge badge-success mb-3">Finished</div>
+
+                                    {% if trip.start_date > datetime.datetime.date %}
+                                        <div class="badge badge-success mb-3">Started</div>
+                                    {% elif trip.end_date > datetime.datetime.date %}
+                                        <div class="badge badge-success mb-3">Ended</div>
+                                    {% else %}
+                                        <div class="badge badge-success mb-3">Planning</div>
+                                    {% endif %}
 
                                     <p class="text-muted font-13 mb-3">
                                         From: {{ trip.user_location }} <br>
@@ -245,8 +252,7 @@
                                     </p>
                                     <div>
                                         <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_full_name }}" class="d-inline-block">
-{#                                            TODO get trip card to display owner profile pitcure                                                                #}
-{#                                            <img src="{{ trip.user_id.userprofile.profile_picture.url }}" class="rounded-circle avatar-xs" alt="friend">#}
+                                            <img src="{{ trip.user_id.userprofile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="">
                                         </a>
                                         <!-- TODO create participant model -->
 {#                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.participants_total.get_full_name }}" class="d-inline-block">#}

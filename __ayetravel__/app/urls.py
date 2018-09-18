@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from travellogs.views import TravelLogList
 from app.views import SearchView, IndexView, CalendarView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,6 +13,5 @@ urlpatterns = [
     url(r'^community/trips/$', CommunityTripsList.as_view(), name='community_list'),
     url(r'^community/trips/(?P<slug>[\w-]+)/$', CommunityTripsDetailed.as_view(), name='community_trips_detailed'),
     url(r'^my/calendar/$', CalendarView.as_view(), name='calendar'),
-    url(r'^my/travellogs/$', TravelLogList.as_view(), name='travel_log_list'),
     url(r'^search/$', SearchView.as_view(), name='search')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

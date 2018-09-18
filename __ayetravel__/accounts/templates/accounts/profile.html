@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 {% extends "app/base.html" %}
+
+{% block title_block %}
+    ayetravel - {{ current_user.get_username }}'s Profile
+{% endblock %}
+
 {% block body_block %}
                     <!-- Start Content-->
                     <div class="container-fluid">
@@ -10,12 +15,11 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
+                                            <li class="breadcrumb-item"><a href="{% url "app:index" %}">Dashboard</a></li>
                                             <li class="breadcrumb-item active">Profile</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">{{ current_user.get_username }}'s Profile</h4>
                                 </div>
                             </div>
                         </div>     
@@ -31,11 +35,11 @@
                                         <div class="row">
                                             <div class="col-sm-8">
                                                 <div class="media">
-                                                    <span class="float-left m-2 mr-4"><img src="assets/images/users/avatar-2.jpg" style="height: 100px;" alt="" class="rounded-circle img-thumbnail"></span>
+                                                    <span class="float-left m-2 mr-4"><img src="{{ current_user.userprofile.get_profile_picture }}" style="height: 100px;" alt="" class="rounded-circle img-thumbnail"></span>
                                                     <div class="media-body">
 
-                                                        <h4 class="mt-1 mb-1 text-white">{{ user.get_username }}</h4>
-                                                        <p class="font-13 text-white-50"> {{ user.usersettings.location }}</p>
+                                                        <h4 class="mt-1 mb-1 text-white">{{ current_user.get_username }}</h4>
+                                                        <p class="font-13 text-white-50"> {{ current_user.usersettings.location }}</p>
 
                                                         <ul class="mb-0 list-inline text-light">
                                                             <li class="list-inline-item mr-3">

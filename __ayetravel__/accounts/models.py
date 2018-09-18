@@ -8,16 +8,23 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profile_pictures', default='media/profile_pictures/default.png')
+    profile_picture = models.ImageField(upload_to='profile_pictures', default='profile_pictures/default.png')
     mfa = models.BooleanField(default=False)
     receive_emails = models.BooleanField(default=True)
     location = models.CharField(max_length=264, blank=True)
     age = models.IntegerField(default=0)
     pins = models.IntegerField(default=0)
+    private_account = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'userprofile'
         verbose_name_plural = 'userprofiles'
+
+    def get_profile_picture(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        else:
+            return 'profile_pictures/default.png'
 
     def __str__(self):
         return f'User profile & settings for the user: {self.user_id.get_username()}'
@@ -57,8 +64,8 @@ class UserNotifications(models.Model):
 #
 #     def __str__(self):
 #         return f'Calendar data for the user: {self.user_id.get_username()}'
-
-
+#
+#
 # @receiver(post_save, sender=User)
 # def create_usercalendar(sender, instance, created, **kwargs):
 #     if created:

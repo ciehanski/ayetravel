@@ -3,11 +3,13 @@ from accounts import forms
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 import urllib
 from urllib.request import urlopen
 import json
 from django.views.generic import TemplateView, FormView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from app.views import render_user_trips, render_user_notifications
 
 
 class LoginView(FormView):
@@ -79,9 +81,16 @@ class LogoutView(LoginRequiredMixin, TemplateView):
 class ProfileView(LoginRequiredMixin, DetailView):
     context_object_name = 'profile'
     template_name = 'accounts/profile.html'
+    object = User
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        context = super().get_context_data(**kwargs)
+        context['current_user'] = render_profile(request)
+        context['trips'] = render_user_trips(request)
+        context['notifs'] = render_user_notifications(request)
+        context['trips_total'] = len(render_user_trips(request))
+        context['notifs_total'] = len(render_user_notifications(request))
+        return render(request, self.template_name, context)
 
 
 class RecoveryView(LoginRequiredMixin, FormView):
@@ -90,4 +99,13 @@ class RecoveryView(LoginRequiredMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
+
+def render_profile(request):
+    current_user = ''
+    for user in User.objects.all():
+        if request.get_raw_uri().__contains__(user.get_username()):
+            current_user = user
+            break
+    return current_user
 

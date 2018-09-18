@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'accounts',
     'app',
     'trips',
-    'travellogs',
     'community',
 ]
 

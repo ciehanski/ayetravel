@@ -22,7 +22,7 @@ class Trips(models.Model):
     packing_list = models.TextField(blank=True, max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    files = models.FilePathField(path='trips/trip_files', null=True, blank=True)
+    files = models.FileField(upload_to='trips/trip_files', null=True, blank=True)
 
     class Meta:
         verbose_name = 'trip'
@@ -56,6 +56,20 @@ class Comments(models.Model):
                    + str(self.user_id.get_username()) + ' left on Trip ID: ' + self.trip.pk)
 
 
+class Pins(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'pin'
+        verbose_name_plural = 'pins'
+
+    def __str__(self):
+        return str(f'Pin ID: ' + str(self.pk) + ' for trip: '
+                   + '"' + self.trip.name + '"' + 'left by user: ' + self.user_id.get_username())
+
+
 class Participants(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
@@ -64,9 +78,8 @@ class Participants(models.Model):
         verbose_name = 'participant'
         verbose_name_plural = 'participants_total'
 
-    # def __str__(self):
-    #     return str(f'Comment ID: ' + str(self.pk) + ' "' + self.message + '"' + ' created by '
-    #                + str(self.user_id.get_username()) + ' left on Trip ID: ' + self.trip.pk)
+    def __str__(self):
+        return str(f'Participant: ' + self.user_id.get_username() + " for trip: " + self.trip.pk)
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
