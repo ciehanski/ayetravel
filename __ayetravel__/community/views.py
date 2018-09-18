@@ -1,8 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, DetailView
 from trips.models import Trips
-from app.views import render_community_trips, render_user_trips, render_user_notifications
+from app.views import render_community_trips, render_user_notifications
 
 
 class CommunityTripsList(LoginRequiredMixin, ListView):
@@ -11,12 +11,11 @@ class CommunityTripsList(LoginRequiredMixin, ListView):
     object_list = Trips.objects.all()
 
     def get(self, request, *args, **kwargs):
-        self.object_list = render_community_trips(request)
         context = super().get_context_data(**kwargs)
-        context['trips'] = render_user_trips(request)
+        context['trips'] = render_community_trips(request)
         context['notifs'] = render_user_notifications(request)
         context['notifs_total'] = len(render_user_notifications(request))
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)
 
 
 class CommunityTripsDetailed(LoginRequiredMixin, DetailView):
@@ -29,7 +28,7 @@ class CommunityTripsDetailed(LoginRequiredMixin, DetailView):
         context['trips'] = self.get_object()
         context['notifs'] = render_user_notifications(request)
         context['notifs_total'] = len(render_user_notifications(request))
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)
 
     def get_object(self, queryset=Trips):
         slug_ = self.kwargs.get('slug')

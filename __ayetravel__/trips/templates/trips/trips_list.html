@@ -90,25 +90,22 @@
                                         <p class="mb-1">
                                             <span class="pr-2 text-nowrap mb-2 d-inline-block">
                                                 <i class="mdi mdi-format-list-bulleted-type text-muted"></i>
-                                                <b>21</b> Tasks
+                                                <b>{{ trip.pins_total }}</b> Pins
                                             </span>
                                             <span class="text-nowrap mb-2 d-inline-block">
                                                 <i class="mdi mdi-comment-multiple-outline text-muted"></i>
-                                                <b>741</b> Comments
+                                                <b>{{ trip.comments_total }}</b> Comments
                                             </span>
                                         </p>
                                         <div>
-                                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="Mat Helme" class="d-inline-block">
+                                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_full_name }}" class="d-inline-block">
                                                 <img src="{% static "app/img/users/avatar-6.jpg" %}" class="rounded-circle avatar-xs" alt="friend">
                                             </a>
     
                                             <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty" class="d-inline-block">
                                                 <img src="{% static "app/img/users/avatar-7.jpg" %}" class="rounded-circle avatar-xs" alt="friend">
                                             </a>
-    
-                                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="James Anderson" class="d-inline-block">
-                                                <img src="{% static "app/img/users/avatar-8.jpg" %}" class="rounded-circle avatar-xs" alt="friend">
-                                            </a>
+
                                             <a href="javascript:void(0);" class="d-inline-block text-dark font-weight-bold ml-2">
                                                 +7 more
                                             </a>

@@ -28,56 +28,43 @@ class LoginView(FormView):
         botcatcher_form = request.POST.get('botcatcher')
 
         # Begin reCAPTCHA validation
-        try:
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret': '6Lcxam4UAAAAAMJYHMLc6obuBA6R1DHYHHfavqph',
-                'response': recaptcha_response
-            }
-            data = urllib.parse.urlencode(values).encode()
-            req = urllib.request.Request(url, data=data)
-            # TODO test
-            with urlopen(req) as conn:
-                result = json.loads(conn.read().decode())
-            # response = urllib.request.urlopen(req)
-            # result = json.loads(response.read().decode())
-            # End reCAPTCHA validation
-        except ValueError:
-            return render(request, self.template_name, {'form': self.login_form,
-                                                        'error': "Couldn't validate your reCAPTCHA form. "
-                                                                 "Please try again."})
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+            'secret': '6Lcxam4UAAAAAMJYHMLc6obuBA6R1DHYHHfavqph',
+            'response': recaptcha_response
+        }
+        data = urllib.parse.urlencode(values).encode()
+        req = urllib.request.Request(url, data=data)
+        response = urllib.request.urlopen(req)
+        result = json.loads(response.read().decode())
+        # End reCAPTCHA validation
 
-        # try to authenticate user
-        try:
-            user = authenticate(username=username_form, password=password_form)
-        except ValueError:
-            return render(request, self.template_name, {'form': self.login_form,
-                                                        'error': "Couldn't authenticate your account. You may be "
-                                                                 "locked out. Please try again in 10 minutes."})
-        else:
-            if result['success'] and botcatcher_form is None:
-                if user:
-                    if user.is_active:
-                        login(request, user)
-                        # Handle remember me, don't expire user auth if checked
-                        if not request.POST.get(remember_me_form, None):
-                            # if checked, don't expire
-                            request.session.set_expiry(0)
-                        # return the redirect of index regardless of remember me checkbox outcome
-                        return HttpResponseRedirect(reverse('app:index'))
-                    else:
-                        # Account not active
-                        return render(request, self.template_name, {'form': self.login_form,
-                                                                    'error': 'Account not active.'})
+        user = authenticate(username=username_form, password=password_form)
+
+        if result['success'] and botcatcher_form is None:
+            if user:
+                if user.is_active:
+                    # Log the user in
+                    login(request, user)
+                    # Handle remember me, don't expire user auth if checked
+                    if not request.POST.get(remember_me_form, None):
+                        # if checked, don't expire
+                        request.session.set_expiry(0)
+                    # return the redirect of index regardless of remember me checkbox outcome
+                    return HttpResponseRedirect(reverse('app:index'))
                 else:
-                    # Not a valid user
+                    # Account not active
                     return render(request, self.template_name, {'form': self.login_form,
-                                                                'error': 'Not a valid user.'})
+                                                                'error': 'Account not active.'})
             else:
-                # recaptcha not completed or botcatcher textbox filled out - we have a bot
+                # Password incorrect
                 return render(request, self.template_name, {'form': self.login_form,
-                                                            'error': 'Please complete reCAPTCHA verification.'})
+                                                            'error': 'Password incorrect.'})
+        else:
+            # recaptcha not completed or botcatcher textbox filled out - we have a bot
+            return render(request, self.template_name, {'form': self.login_form,
+                                                        'error': 'Please complete reCAPTCHA verification.'})
 
 
 class LogoutView(LoginRequiredMixin, TemplateView):

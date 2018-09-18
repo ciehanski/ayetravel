@@ -147,11 +147,11 @@
                                     <p class="mb-1">
                                         <span class="pr-2 text-nowrap mb-2 d-inline-block">
                                             <i class="mdi mdi-format-list-bulleted-type text-muted"></i>
-                                            <b>{{ trip.pins }}</b> Pins
+                                            <b>{{ trip.pins_total }}</b> Pins
                                         </span>
                                         <span class="text-nowrap mb-2 d-inline-block">
                                             <i class="mdi mdi-comment-multiple-outline text-muted"></i>
-                                            <b>{{ trip.comments }}</b> Comments
+                                            <b>{{ trip.comments_total }}</b> Comments
                                         </span>
                                     </p>
                                     <div>
@@ -236,15 +236,16 @@
                                     <p class="mb-1">
                                         <span class="pr-2 text-nowrap mb-2 d-inline-block">
                                             <i class="mdi mdi-format-list-bulleted-type text-muted"></i>
-                                            <b>{{ trip.pins }}</b> Pins
+                                            <b>{{ trip.pins_total }}</b> Pins
                                         </span>
                                         <span class="text-nowrap mb-2 d-inline-block">
                                             <i class="mdi mdi-comment-multiple-outline text-muted"></i>
-                                            <b>{{ trip.comments }}</b> Comments
+                                            <b>{{ trip.comments_total }}</b> Comments
                                         </span>
                                     </p>
                                     <div>
                                         <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_full_name }}" class="d-inline-block">
+{#                                            TODO get trip card to display owner profile pitcure                                                                #}
 {#                                            <img src="{{ trip.user_id.userprofile.profile_picture.url }}" class="rounded-circle avatar-xs" alt="friend">#}
                                         </a>
                                         <!-- TODO create participant model -->

@@ -23,4 +23,4 @@ before_script:
   - python3 manage.py migrate
 script:
   # - gunicorn --daemon --workers 3 --bind unix:$TRAVIS_BUILD_DIR/__ayetravel__/ayetravel.sock ayetravel.wsgi
-  - python manage.py test
+  - python3 manage.py test

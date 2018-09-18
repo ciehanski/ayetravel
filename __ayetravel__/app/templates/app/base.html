@@ -155,7 +155,12 @@
                                         </a>
                                     {% endfor %}
                                     {% else %}
-                                        <p>No notifications.</p>
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            No notifications.
+                                        </div>
                                     {% endif %}
 
                                     </div>
@@ -169,10 +174,9 @@
                             </li>
 
                             <li class="dropdown notification-list">
-                                <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                                    aria-expanded="false">
+                                <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <span class="account-user-avatar">
-                                        <img src="{{ user.userprofile.profile_picture.url }}" alt="{% static "app/img/users/default-profile-img.jpg" %}" class="rounded-circle">
+                                        <img src="{{ user.userprofile.profile_picture.url }}" alt="{% static "admin/img/default.png" %}" class="rounded-circle">
                                     </span>
                                     <span>
                                         <span class="account-user-name">{{ user.get_short_name }}</span>

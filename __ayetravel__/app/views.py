@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from trips.models import Trips
 from accounts.models import UserNotifications, UserProfile
@@ -30,6 +30,21 @@ class IndexView(LoginRequiredMixin, TemplateView):
             return render(request, 'app/search.html', context)
         else:
             raise ValidationError('Nothing matched your search.')
+
+
+class SearchView(LoginRequiredMixin, ListView):
+    context_object_name = 'search'
+    template_name = 'app/search.html'
+    object_list = Trips.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = render_user_trips(request)
+        context = super().get_context_data(**kwargs)
+        context['trips'] = render_user_trips(request)
+        context['notifs'] = render_user_notifications(request)
+        context['trips_total'] = len(render_user_trips(request))
+        context['notifs_total'] = len(render_user_notifications(request))
+        return render(request, self.template_name, context)
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
