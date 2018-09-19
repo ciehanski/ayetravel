@@ -9,7 +9,7 @@ from app.views import IndexView
 class TripsDetailed(IndexView, DetailView):
     context_object_name = 'trips_detailed'
     template_name = 'trips/trips_detailed.html'
-    object = Trips
+    queryset = Trips.objects.all()
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
