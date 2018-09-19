@@ -45,7 +45,7 @@ class CreateTrip(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['notifs'] = render_user_notifications(request)
         context['notifs_total'] = len(render_user_notifications(request))
-        return render(request, self.template_name, context)
+        return render(request, self.template_name, self.form_class)
 
     def get_object(self, queryset=Trips):
         slug_ = self.kwargs.get('slug')
