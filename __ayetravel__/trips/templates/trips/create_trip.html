@@ -13,6 +13,7 @@
 {% block custom_body %}onload="initialize()"{% endblock %}
 
 {% block body_block %}
+
         <!-- Start Content-->
         <div class="container-fluid">
 
@@ -33,7 +34,7 @@
             </div>
             <!-- end page title -->
 
-
+            <form method="post">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -47,7 +48,7 @@
                                         Name your trip something fun!
                                     </p>
 
-                                    <input type="text" class="form-control" data-toggle="input-mask">
+                                    {{ name }}
                                     <span class="font-13 text-muted">e.g "Fucking Reno!"</span>
 
                                 </div> <!-- end col -->
@@ -68,17 +69,7 @@
                                     <p class="text-muted font-14">
                                         Your address or city will work.
                                     </p>
-                                    <script>
-                                        var autocomplete;
-                                        function initialize() {
-                                          autocomplete = new google.maps.places.Autocomplete(
-                                              /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
-                                              { types: ['geocode'] });
-                                          google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                                          });
-                                        }
-                                    </script>
-                                    <input type="text" class="form-control" onFocus="geolocate()" data-toggle="input-mask">
+                                    {{ user_location }}
                                     <span class="font-13 text-muted">e.g "Chicago, IL"</span>
                                 </div> <!-- end col -->
 
@@ -87,17 +78,7 @@
                                     <p class="text-muted font-14">
                                         Hopefully somewhere warm!
                                     </p>
-                                    <script>
-                                        var autocomplete;
-                                        function initialize() {
-                                          autocomplete = new google.maps.places.Autocomplete(
-                                              /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
-                                              { types: ['geocode'] });
-                                          google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                                          });
-                                        }
-                                    </script>
-                                    <input type="text" class="form-control" onFocus="geolocate()" data-toggle="input-mask">
+                                    {{ destination }}
                                     <span class="font-13 text-muted">e.g "San Fransisco, CA"</span>
                                 </div> <!-- end col -->
 
@@ -122,7 +103,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label>Start Date</label>
-                                        <input type="text" class="form-control date" id="singledaterange" data-toggle="date-picker" data-cancel-class="btn-warning">
+                                        {{ start_date }}
                                         <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                     </div>
                                 </div>
@@ -130,7 +111,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label>End Date</label>
-                                        <input type="text" class="form-control date" id="singledaterange" data-toggle="date-picker" data-cancel-class="btn-warning">
+                                        {{ end_date }}
                                         <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                     </div>
                                 </div>
@@ -150,8 +131,7 @@
                                 <p class="text-muted font-13">
                                     List all the things you'll need for this job.
                                 </p>
-                                <textarea data-toggle="maxlength" class="form-control" maxlength="1000" rows="9"
-                                    placeholder="Shampoo, soap, condoms, wine..."></textarea>
+                                {{ packing_list }}
                             </div>
                         </div>
                     </div>
@@ -167,13 +147,23 @@
                                 Would you like to make your trip public to the community?
                             </p>
                             <!-- Success Switch-->
-                            <input type="checkbox" id="switch3" checked data-switch="success"/>
+                            {{ public }}
                             <label for="switch3" data-off-label="No" data-on-label="Yes"></label>
                         </div> <!-- end card-body -->
                     </div> <!-- end card-->
                 </div> <!-- end col -->
             </div>
             <!-- end row -->
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <a href="">
+                        <button type="submit" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create Trip</button>
+                    </a>
+                </div>
+            </div>
+
+            </form>
         </div> <!-- container -->
 
 {% endblock %}

@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
+from trips.forms import CreateTripForm
 from trips.models import Trips
 from app.views import render_user_trips, render_community_trips, render_user_notifications
 
@@ -37,9 +38,7 @@ class TripsDetailed(LoginRequiredMixin, DetailView):
 class CreateTrip(LoginRequiredMixin, CreateView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
-    object = Trips
-    model = Trips
-    fields = '__all__'
+    form_class = CreateTripForm
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
