@@ -5,6 +5,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView, ListView, F
 from trips.forms import CreateTripForm
 from trips.models import Trips
 from app.views import render_user_trips, render_community_trips, render_user_notifications
+from app.views import IndexView
 
 
 class TripsDetailed(LoginRequiredMixin, DetailView):
@@ -35,16 +36,10 @@ class TripsDetailed(LoginRequiredMixin, DetailView):
                                                              'do not have permissions to view.'})
 
 
-class CreateTrip(LoginRequiredMixin, FormView):
+class CreateTrip(IndexView, FormView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
     create_trip_form = CreateTripForm()
-
-    def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['notifs'] = render_user_notifications(request)
-        context['notifs_total'] = len(render_user_notifications(request))
-        return render(request, self.template_name, context)
 
     def form_valid(self, form):
         form.save()
