@@ -23,13 +23,3 @@ before_script:
   - python3 manage.py migrate
 script:
   - python3 manage.py test
-
-
-
-
-
-
-  - docker-compose up -d
-  - python3 manage.py makemigrations
-  - python3 manage.py migrate
-  - docker-compose down
