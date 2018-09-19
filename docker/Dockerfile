@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y python3-dev \
     && source venv/bin/activate \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install -r requirements.txt \
-    && cd ../__ayetravel__/
+    && cd ../__ayetravel__/ \
     && python3 manage.py makemigrations \
     && python3 manage.py migrate
 EXPOSE 8000
