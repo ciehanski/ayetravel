@@ -1,12 +1,11 @@
 FROM python:3.7.0-stretch
 MAINTAINER Ryan Ciehanski "ryan@ciehanski.com"
-COPY ../requirements.txt .
 RUN apt-get update && apt-get install -y python3-dev \
     && python3 -m venv venv \
     && source venv/bin/activate \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install -r requirements.txt \
-    && cd ../__ayetravel__/ \
+    && cd __ayetravel__/ \
     && python3 manage.py makemigrations \
     && python3 manage.py migrate
 EXPOSE 8000
