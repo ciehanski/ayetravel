@@ -44,12 +44,12 @@ services:
 
   web:
      image: nginx:latest
+     command: nginx -c ./nginx.conf -g "daemon off;"
      depends_on:
        - backend
      volumes:
        - /static:/static
        - /media:/media
-       - ./nginx.conf:/etc/nginx/nginx.conf
      networks:
        - web
      container_name: ayetravel_web
