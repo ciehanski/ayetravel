@@ -1,5 +1,19 @@
 version: '3'
 services:
+  web:
+    image: nginx:alpine
+    command: nginx -c ./nginx.conf -g "daemon off;"
+    volumes:
+      - /static:/static
+      - /media:/media
+    networks:
+      - web
+    container_name: ayetravel_web
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+
   cache:
      image: memcached:alpine
      networks:
@@ -10,9 +24,9 @@ services:
   db:
      image: postgres:alpine
      volumes:
-         - "db_data:/var/lib/postgresql/data"
+        - "db_data:/var/lib/postgresql/data"
      networks:
-         - db
+        - db
      container_name: ayetravel_db
      restart: always
      environment:
@@ -41,22 +55,6 @@ services:
      restart: always
      ports:
         - "8000:8000"
-
-  web:
-     image: nginx:latest
-     command: nginx -c ./nginx.conf -g "daemon off;"
-     depends_on:
-       - backend
-     volumes:
-       - /static:/static
-       - /media:/media
-     networks:
-       - web
-     container_name: ayetravel_web
-     restart: always
-     ports:
-       - "80:80"
-       - "443:443"
 
 volumes:
   db_data:
