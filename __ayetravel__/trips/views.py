@@ -39,7 +39,7 @@ class TripsDetailed(LoginRequiredMixin, DetailView):
 class CreateTrip(IndexView, FormView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
-    create_trip_form = CreateTripForm()
+    form_class = CreateTripForm
 
     def form_valid(self, form):
         form.save()
