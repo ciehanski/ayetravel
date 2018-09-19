@@ -1,25 +1,19 @@
-language: python
-python:
-  - 3.6
-services:
-  - memcached
-  - postgresql
+sudo: required
+
 env:
-  - DJANGO=2.1.1 DB=postgresql
-install:
-  - sudo apt-get install python3-dev nginx
-before_script:
-  - sudo -u postgres psql -c "CREATE USER ayetravel_db_admin WITH PASSWORD 'ayetravel';"
-  - sudo -u postgres psql -c "CREATE DATABASE ayetravel;"
-  - sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ayetravel TO ayetravel_db_admin;"
-  - sudo -u postgres psql -c "ALTER ROLE ayetravel_db_admin SET client_encoding TO 'utf8';"
-  - sudo -u postgres psql -c "ALTER ROLE ayetravel_db_admin SET timezone TO 'UTC';"
-  - python3 -m venv venv
-  - source venv/bin/activate
-  - python3 -m pip install -r requirements.txt
-  - sudo cp docker/ayetravel-nginx-travis.conf /etc/nginx/sites-available/ayetravel-nginx-travis.conf
-  - cd __ayetravel__/
-  - python3 manage.py makemigrations
-  - python3 manage.py migrate
-script:
-  - python3 manage.py test
+  DOCKER_COMPOSE_VERSION: 3.7
+  before_install:
+  - sudo apt-get update
+  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+  - docker-compose --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - sudo cp /__ayetravel__/docker-compose.yaml .
+  - docker-compose up
+#  - docker-compose pull
+#  - docker-compose build
+#  - docker-compose start
+#script:
+#  - python3 manage.py test
