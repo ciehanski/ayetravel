@@ -1,18 +1,12 @@
-language: python
-python:
-  - 3.6
-services:
-  - memcached
-  - sqlite3
-  # - postgresql
 env:
-  - DJANGO=2.1.1 DB=sqlite3
-install:
-  - sudo apt-get install python3-dev
-  - pip install -r requirements.txt
-before_script:
-  # - postgres -e 'create database test;' -u root
-  - cd $TRAVIS_BUILD_DIR/__ayetravel__
+  DOCKER_COMPOSE_VERSION: 1.22.0
+
+before_install:
+  - sudo apt-get update
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - sudo cp __ayetravel__/docker-compose.yml .
 script:
-  #- gunicorn ayetravel.wsgi
-  - python manage.py test
+  - docker-compose up -d

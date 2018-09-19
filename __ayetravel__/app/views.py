@@ -1,83 +1,104 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, DetailView, ListView, UpdateView, DeleteView
+from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.models import Trips, TravelLogs
-from app.forms import CreateTripForm
-from django.urls import reverse_lazy
+from trips.models import Trips
+from accounts.models import UserNotifications, UserProfile
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
     context_object_name = 'index'
-    template_name = '../../app/templates/app/index.html'
+    template_name = 'app/index.html'
 
-    def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['trips'] = Trips.objects.all()
-        return context
+        context['community_trips'] = render_community_trips(request)
+        context['trips'] = render_user_trips(request)
+        context['notifs'] = render_user_notifications(request)
+        context['trips_total'] = len(render_user_trips(request))
+        context['notifs_total'] = len(render_user_notifications(request))
 
-
-class TravelLogList(LoginRequiredMixin, ListView):
-    context_object_name = 'travel_log_list'
-    template_name = '../../app/templates/app/travel_log.html'
-    model = TravelLogs
-
-
-class TripsList(LoginRequiredMixin, ListView):
-    context_object_name = 'trips_list'
-    template_name = '../../app/templates/app/trips_list.html'
-    model = Trips
-
-
-class TripsDetailed(LoginRequiredMixin, DetailView):
-    context_object_name = 'trips_detailed'
-    template_name = '../../app/templates/app/trips_detailed.html'
-    model = Trips
-
-
-class CreateTrip(LoginRequiredMixin, CreateView):
-    context_object_name = 'create_trip'
-    template_name = '../../app/templates/app/create_trip.html'
-    model = Trips
-    fields = '__all__'
-
-    form = CreateTripForm()
-
-    def post(self, request, *args, **kwargs):
-        form = CreateTripForm(request.POST)
-
-        if form.is_valid():
-            form.save(commit=True)
-            return TripsList(request)
+        # Search handling
+        search_term = request.GET.get('search')
+        if search_term is not None:
+            search = Trips.objects.all().filter(name__icontains=search_term)
+            if len(search) > 0:
+                trips = []
+                for trip in search:
+                    trips.append(trip)
+                context['search_results'] = trips
+                return render(request, 'app/search.html', context)
+            else:
+                context['error'] = 'Nothing matched your search.'
+                return render(request, 'app/search.html', context)
         else:
-            print('Create Trip - Form invalid')
-            return render(request, '../../app/templates/app/create_trip.html', {'form': form})
+            # if search was blank, just re-render index page
+            return render(request, self.template_name, context)
 
 
-class UpdateTrip(LoginRequiredMixin, UpdateView):
-    context_object_name = 'update_trip'
-    template_name = '../../app/templates/app/create_trip.html'
-    model = Trips
-    fields = '__all__'
+class SearchView(LoginRequiredMixin, ListView):
+    context_object_name = 'search'
+    template_name = 'app/search.html'
+    object_list = Trips.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['trips'] = render_user_trips(request)
+        context['notifs'] = render_user_notifications(request)
+        context['trips_total'] = len(render_user_trips(request))
+        context['notifs_total'] = len(render_user_notifications(request))
+        return render(request, self.template_name, context)
 
 
-class DeleteTrip(LoginRequiredMixin, DeleteView):
-    context_object_name = 'update_trip'
-    template_name = '../../app/templates/app/create_trip.html'
-    model = Trips
-    success_url = reverse_lazy('app:trips_list')
-
-    def post(self, request, *args, **kwargs):
-        pass
-
-
-class CalendarView(LoginRequiredMixin, DetailView):
+class CalendarView(LoginRequiredMixin, TemplateView):
     context_object_name = 'calendar'
-    template_name = '../../app/templates/app/calendar.html'
+    template_name = 'app/calendar.html'
+
+
+def render_user_notifications(request):
+    notifs = []
+    for notif in UserNotifications.objects.all():
+        if notif.user_id.get_username() == request.user.get_username():
+            notifs.append(notif)
+    return notifs
+
+
+def render_user_trips(request):
+    trips = []
+    for trip in Trips.objects.all():
+        if trip.user_id.get_username() == request.user.get_username():
+            trips.append(trip)
+    return trips
+
+
+def render_user_trip_detail(request):
+    trips = []
+    for trip in Trips.objects.all():
+        if trip.user_id.get_username() == request.user.get_username() or trip.public:
+            trips.append(trip)
+    return trips
+
+
+def render_community_trips(request):
+    community_trips = []
+    for trip in Trips.objects.all():
+        if trip.public:
+            if trip.user_id.get_username() != request.user.get_username():
+                community_trips.append(trip)
+    return community_trips
+
+
+def render_pins(request):
+    pins = []
+    for pin in UserProfile.objects.all():
+        if pin.user_id.get_username() == request.user.get_username():
+            if len(pin.user_id.userprofile.pins) > 0:
+                pins.append(pin)
+    return pins
 
 
 def handler404(request):
-    return render(request, '404.html', status=404)
+    return render(request, 'app/404.html', status=404)
 
 
 def handler500(request):
-    return render(request, '500.html', status=500)
+    return render(request, 'app/500.html', status=500)

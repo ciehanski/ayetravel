@@ -1,9 +1,8 @@
 from datetime import datetime
 from time import time
-from lxml import html
+from defusedxml import lxml
 import requests
 import re
-import os, sys
 import unicodecsv as csv
 import argparse
 
@@ -21,8 +20,7 @@ def parse(locality, checkin_date, checkout_date, sort):
     api_response = requests.get(geo_url, verify=False).json()
     # getting the TA url for th equery from the autocomplete response
     url_from_autocomplete = "http://www.tripadvisor.com" + api_response['results'][0]['url']
-    print
-    'URL found %s' % url_from_autocomplete
+    print('URL found %s' % url_from_autocomplete)
     geo = api_response['results'][0]['value']
     # Formating date for writing to file
 
@@ -55,7 +53,7 @@ def parse(locality, checkin_date, checkout_date, sort):
                                   verify=False)
     print
     "Parsing results "
-    parser = html.fromstring(page_response.text)
+    parser = lxml.fromstring(page_response.text)
     hotel_lists = parser.xpath('//div[contains(@class,"listItem")]//div[contains(@class,"listing collapsed")]')
     hotel_data = []
     if not hotel_lists:

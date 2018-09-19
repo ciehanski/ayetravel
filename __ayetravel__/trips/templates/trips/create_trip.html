@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block scripts_block %}
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+{% endblock %}
+
+{% block title_block %}
+    ayetravel - Create Trip
+{% endblock %}
+
+{% block custom_body %}onload="initialize()"{% endblock %}
+
+{% block body_block %}
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="{% url "app:index" %}">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="{% url "trips:trips_list" %}">Trips</a></li>
+                                <li class="breadcrumb-item active">Create Trip</li>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">Create Trip</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">Basic Info</h4>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1 mt-3 font-weight-bold text-muted">Name</p>
+                                    <p class="text-muted font-14">
+                                        Name your trip something fun!
+                                    </p>
+
+                                    <input type="text" class="form-control" data-toggle="input-mask">
+                                    <span class="font-13 text-muted">e.g "Fucking Reno!"</span>
+
+                                </div> <!-- end col -->
+
+                                <div class="col-md-6">
+                                    <p class="mb-1 mt-3 font-weight-bold text-muted">Budget</p>
+                                    <p class="text-muted font-14">
+                                        How much are you looking to spend on this trip?
+                                    </p>
+
+                                    <input type="text" class="form-control" data-toggle="input-mask">
+                                    <span class="font-13 text-muted">e.g $3,800</span>
+
+                                </div> <!-- end col -->
+
+                                <div class="col-md-6">
+                                    <p class="mb-1 mt-3 font-weight-bold text-muted">Where are you currently?</p>
+                                    <p class="text-muted font-14">
+                                        Your address or city will work.
+                                    </p>
+                                    <script>
+                                        var autocomplete;
+                                        function initialize() {
+                                          autocomplete = new google.maps.places.Autocomplete(
+                                              /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
+                                              { types: ['geocode'] });
+                                          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                                          });
+                                        }
+                                    </script>
+                                    <input type="text" class="form-control" onFocus="geolocate()" data-toggle="input-mask">
+                                    <span class="font-13 text-muted">e.g "Chicago, IL"</span>
+                                </div> <!-- end col -->
+
+                                <div class="col-md-6">
+                                    <p class="mb-1 mt-3 font-weight-bold text-muted">Where are you going?</p>
+                                    <p class="text-muted font-14">
+                                        Hopefully somewhere warm!
+                                    </p>
+                                    <script>
+                                        var autocomplete;
+                                        function initialize() {
+                                          autocomplete = new google.maps.places.Autocomplete(
+                                              /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
+                                              { types: ['geocode'] });
+                                          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                                          });
+                                        }
+                                    </script>
+                                    <input type="text" class="form-control" onFocus="geolocate()" data-toggle="input-mask">
+                                    <span class="font-13 text-muted">e.g "San Fransisco, CA"</span>
+                                </div> <!-- end col -->
+
+                            </div> <!-- end row -->
+
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+            </div>
+            <!-- end row-->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">When are you planing this trip?</h4>
+                            <p class="text-muted font-14">
+                                (Don't worry you can change this later)
+                            </p>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label>Start Date</label>
+                                        <input type="text" class="form-control date" id="singledaterange" data-toggle="date-picker" data-cancel-class="btn-warning">
+                                        <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label>End Date</label>
+                                        <input type="text" class="form-control date" id="singledaterange" data-toggle="date-picker" data-cancel-class="btn-warning">
+                                        <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div> <!-- end card-body -->
+                    </div> <!-- end card-->
+                </div> <!-- end col -->
+            <!-- end row -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group mb-0">
+                                <label>Packing List</label>
+                                <p class="text-muted font-13">
+                                    List all the things you'll need for this job.
+                                </p>
+                                <textarea data-toggle="maxlength" class="form-control" maxlength="1000" rows="9"
+                                    placeholder="Shampoo, soap, condoms, wine..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">Community Trip</h4>
+                            <p class="text-muted font-14 mb-3">
+                                Would you like to make your trip public to the community?
+                            </p>
+                            <!-- Success Switch-->
+                            <input type="checkbox" id="switch3" checked data-switch="success"/>
+                            <label for="switch3" data-off-label="No" data-on-label="Yes"></label>
+                        </div> <!-- end card-body -->
+                    </div> <!-- end card-->
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div> <!-- container -->
+
+{% endblock %}
