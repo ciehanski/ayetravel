@@ -39,6 +39,7 @@ class CreateTrip(LoginRequiredMixin, CreateView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
     form_class = CreateTripForm
+    object = Trips
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
