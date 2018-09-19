@@ -43,7 +43,7 @@ services:
         - "8000:8000"
 
   web:
-     image: nginx:alpine
+     image: nginx:latest
      depends_on:
        - backend
      volumes:
