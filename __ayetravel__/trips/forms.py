@@ -38,9 +38,9 @@ class CreateTripForm(forms.ModelForm):
                                                   'rows': '10',
                                                   'placeholder': 'Shampoo, soap, condoms, wine...'}),
             'public': forms.BooleanField(label='', required=False,
-                                         attrs={'type': 'checkbox',
-                                                'id': 'switch3',
-                                                'checked data-switch': 'success'}),
+                                         widget=forms.CheckboxInput(attrs={'type': 'checkbox',
+                                                                           'id': 'switch3',
+                                                                           'checked data-switch': 'success'})),
             'files': forms.FileInput(),
             'picture': forms.FileInput(),
         }
