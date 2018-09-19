@@ -54,7 +54,7 @@ services:
      container_name: ayetravel_backend
      restart: always
      ports:
-        - "8000:80"
+        - "80:80"
 
 volumes:
   db_data:
