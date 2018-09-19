@@ -8,12 +8,10 @@ class CreateTripForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'name': forms.CharField(max_length=50,
-                                    attrs={'class': 'form-control',
-                                           'type': 'text'}),
-            # 'data-toggle': 'input-mask'}),
-            'budget': forms.IntegerField(attrs={'class': 'form-control',
-                                                'type': 'text'}),
-            # 'data-toggle': 'input-mask'}),
+                                    attrs={'class': 'form-control'}),
+            # 'type': 'text'}), 'data-toggle': 'input-mask'}),
+            'budget': forms.IntegerField(attrs={'class': 'form-control'}),
+            # 'type': 'text'}), 'data-toggle': 'input-mask'}),
             'user_location': forms.CharField(max_length=100,
                                              attrs={'class': 'form-control',
                                                     'type': 'text',
