@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
+from django.views.generic import DetailView, UpdateView, DeleteView, ListView, FormView
 from trips.forms import CreateTripForm
 from trips.models import Trips
 from app.views import render_user_trips, render_community_trips, render_user_notifications
@@ -35,27 +35,16 @@ class TripsDetailed(LoginRequiredMixin, DetailView):
                                                              'do not have permissions to view.'})
 
 
-class CreateTrip(LoginRequiredMixin, CreateView):
+class CreateTrip(LoginRequiredMixin, FormView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
-    form_class = CreateTripForm
-    object = Trips
+    create_trip_form = CreateTripForm()
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['notifs'] = render_user_notifications(request)
         context['notifs_total'] = len(render_user_notifications(request))
-        context['name'] = self.form_class.name
-        context['user_location'] = self.form_class.user_location
-        context['destination'] = self.form_class.destination
-        context['budget'] = self.form_class.budget
-        context['packing_list'] = self.form_class.packing_list
-        context['participants_total'] = self.form_class.participants_total
         return render(request, self.template_name, context)
-
-    def get_object(self, queryset=Trips):
-        slug_ = self.kwargs.get('slug')
-        return get_object_or_404(Trips, slug=slug_)
 
     def form_valid(self, form):
         form.save()
