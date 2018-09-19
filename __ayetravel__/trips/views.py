@@ -45,7 +45,13 @@ class CreateTrip(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['notifs'] = render_user_notifications(request)
         context['notifs_total'] = len(render_user_notifications(request))
-        return render(request, self.template_name, self.form_class)
+        context['name'] = self.form_class.name
+        context['user_location'] = self.form_class.user_location
+        context['destination'] = self.form_class.destination
+        context['budget'] = self.form_class.budget
+        context['packing_list'] = self.form_class.packing_list
+        context['participants_total'] = self.form_class.participants_total
+        return render(request, self.template_name, context)
 
     def get_object(self, queryset=Trips):
         slug_ = self.kwargs.get('slug')
