@@ -1,5 +1,3 @@
-sudo: required
-
 env:
   DOCKER_COMPOSE_VERSION: 1.22.0
 
@@ -9,9 +7,6 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - sudo cp __ayetravel__/docker-compose.yaml .
-  - docker-compose pull
-  - docker-compose build
-  - docker-compose start
-#script:
-#  - python3 manage.py test
+  - sudo cp __ayetravel__/docker-compose.yml .
+script:
+  - docker-compose up -d
