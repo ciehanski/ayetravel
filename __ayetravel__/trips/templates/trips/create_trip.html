@@ -45,10 +45,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Name</label>
-                                    <p class="text-muted font-14">
-                                        Name your trip something fun!
-                                    </p>
-
                                     {{ form.name }}
                                     <span class="font-13 text-muted">e.g "Fucking Reno!"</span>
 
@@ -56,10 +52,6 @@
 
                                 <div class="col-md-6">
                                     <label>Budget</label>
-                                    <p class="text-muted font-14">
-                                        How much are you looking to spend on this trip?
-                                    </p>
-
                                     {{ form.budget }}
                                     <span class="font-13 text-muted">e.g $3,800</span>
 
@@ -67,18 +59,12 @@
 
                                 <div class="col-md-6">
                                     <label>Where are you currently?</label>
-                                    <p class="text-muted font-14">
-                                        Your address or city will work.
-                                    </p>
                                     {{ form.user_location }}
                                     <span class="font-13 text-muted">e.g "Chicago, IL"</span>
                                 </div> <!-- end col -->
 
                                 <div class="col-md-6">
                                     <label>Where are you going?</label>
-                                    <p class="text-muted font-14">
-                                        Hopefully somewhere warm!
-                                    </p>
                                     {{ form.destination }}
                                     <span class="font-13 text-muted">e.g "San Fransisco, CA"</span>
                                 </div> <!-- end col -->
@@ -99,13 +85,11 @@
                             <p class="text-muted font-14">
                                 (Don't worry you can change this later)
                             </p>
-
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label>Start Date</label>
                                         {{ form.start_date }}
-                                        <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                     </div>
                                 </div>
 
@@ -113,7 +97,6 @@
                                     <div class="form-group mb-3">
                                         <label>End Date</label>
                                         {{ form.end_date }}
-                                        <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +113,7 @@
                             <div class="form-group mb-0">
                                  <h4 class="header-title">Packing List</h4>
                                 <p class="text-muted font-13">
-                                    List all the things you'll need for this job.
+                                    List all the things you'll need for this trip.
                                 </p>
                                 {{ form.packing_list }}
                             </div>
