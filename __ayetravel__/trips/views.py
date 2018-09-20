@@ -29,8 +29,8 @@ class TripsDetailed(IndexView, DetailView):
 class CreateTrip(IndexView, CreateView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
-    model = Trips
     form_class = CreateTripForm
+    object = Trips
 
     def form_valid(self, form):
         form.save()
