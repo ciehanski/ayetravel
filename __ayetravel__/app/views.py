@@ -16,11 +16,10 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context['notifs'] = render_user_notifications(request)
         context['trips_total'] = len(render_user_trips(request))
         context['notifs_total'] = len(render_user_notifications(request))
-
         # Search handling
         search_term = request.GET.get('search')
         if search_term is not None:
-            search = Trips.objects.all().filter(name__icontains=search_term)
+            search = Trips.objects.filter(name__icontains=search_term)
             if len(search) > 0:
                 trips = []
                 for trip in search:
@@ -35,21 +34,13 @@ class IndexView(LoginRequiredMixin, TemplateView):
             return render(request, self.template_name, context)
 
 
-class SearchView(LoginRequiredMixin, ListView):
+class SearchView(IndexView, ListView):
     context_object_name = 'search'
     template_name = 'app/search.html'
     object_list = Trips.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['trips'] = render_user_trips(request)
-        context['notifs'] = render_user_notifications(request)
-        context['trips_total'] = len(render_user_trips(request))
-        context['notifs_total'] = len(render_user_notifications(request))
-        return render(request, self.template_name, context)
 
-
-class CalendarView(LoginRequiredMixin, TemplateView):
+class CalendarView(IndexView, TemplateView):
     context_object_name = 'calendar'
     template_name = 'app/calendar.html'
 

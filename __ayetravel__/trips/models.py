@@ -24,6 +24,9 @@ class Trips(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     files = models.FileField(upload_to='trips/trip_files', null=True, blank=True)
+    comments = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    pins = models.ForeignKey(Pins, on_delete=models.CASCADE)
+    participants = models.ForeignKey(Participants, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'trip'
@@ -33,6 +36,27 @@ class Trips(models.Model):
         #     ("view_trip", "Can view this specific trip."),
         #     ("modify_trip", "Can modify this specific trip."),
         #     ("delete_trip", "Can remove this specific trip."))
+
+    def get_comments(self):
+        all_com = []
+        for comment in Comments.objects.all():
+            if comment.trip.pk == self.pk:
+                all_com += comment
+        return all_com
+
+    def add_comment(self, comment):
+        comment.trip = self
+        self.comments_total += 1
+        self.save()
+
+    def add_pin(self, pin):
+        pin.trip = self
+        self.pins_total += 1
+        self.save()
+
+    def add_participant(self, user):
+        self.participants_total += 1
+        self.save()
 
     def get_status(self):
         if self.start_date > datetime.date.today():
@@ -49,7 +73,7 @@ class Trips(models.Model):
                    + str(self.user_id.get_username()))
 
     def get_absolute_url(self):
-        return reverse('app:trips_detailed', kwargs={'slug': self.slug})
+        return reverse('trips:trips_detailed', kwargs={'slug': self.slug})
 
 
 class Comments(models.Model):
@@ -65,6 +89,9 @@ class Comments(models.Model):
     def __str__(self):
         return str(f'Comment ID: ' + str(self.pk) + ' "' + self.message + '"' + ' created by '
                    + str(self.user_id.get_username()) + ' left on Trip ID: ' + self.trip.pk)
+
+    def get_absolute_url(self):
+        return reverse('trips:trips_detailed', kwargs={'slug': self.trip.slug})
 
 
 class Pins(models.Model):

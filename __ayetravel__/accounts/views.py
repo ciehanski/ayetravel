@@ -9,7 +9,7 @@ from urllib.request import urlopen
 import json
 from django.views.generic import TemplateView, FormView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.views import render_user_trips, render_user_notifications
+from app.views import render_user_trips, render_user_notifications, IndexView
 
 
 class LoginView(FormView):
@@ -78,24 +78,16 @@ class LogoutView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name)
 
 
-class ProfileView(LoginRequiredMixin, DetailView):
+class ProfileView(IndexView, DetailView):
     context_object_name = 'profile'
     template_name = 'accounts/profile.html'
     object = User
-
-    def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['current_user'] = render_profile(request)
-        context['trips'] = render_user_trips(request)
-        context['notifs'] = render_user_notifications(request)
-        context['trips_total'] = len(render_user_trips(request))
-        context['notifs_total'] = len(render_user_notifications(request))
-        return render(request, self.template_name, context)
 
 
 class RecoveryView(LoginRequiredMixin, FormView):
     context_object_name = 'recovery'
     template_name = 'accounts/recovery.html'
+    # form_class = ''
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
