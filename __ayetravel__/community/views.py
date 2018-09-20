@@ -12,7 +12,7 @@ class CommunityTripsList(IndexView, ListView):
 
 class CommunityTripsDetailed(IndexView, DetailView):
     context_object_name = 'community_trips_detailed'
-    template_name = 'trips/trips_detailed.html'
+    template_name = 'community/community_detailed.html'
     object = Trips
 
     def get_object(self, queryset=Trips):
