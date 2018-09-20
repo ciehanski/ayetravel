@@ -31,11 +31,10 @@
                             <div class="card-body p-4">
                                 <form action="." method="POST">
                                     {% csrf_token %}
-                                    {% if form.errors %}
                                     <div class="form-group">
                                         <label for="username_textbox">Username</label>
                                         {{ form.username_textbox }}
-                                        {% if error_type == 'username' %}
+                                        {% if error_type == 'disabled' %}
                                             <div class="invalid-feedback">
                                                 Username is invalid.
                                             </div>
@@ -69,7 +68,6 @@
                                     <div class="form-group mb-0 text-center">
                                         <button class="btn btn-primary" type="submit"> Log In </button>
                                     </div>
-                                    {% endif %}
                                 </form>
                             </div> <!-- end card-body -->
                         </div>

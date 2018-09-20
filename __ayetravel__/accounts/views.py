@@ -58,18 +58,15 @@ class LoginView(FormView):
                 else:
                     # Account not active
                     return render(request, self.template_name, {'form': self.login_form,
-                                                                'error_type': 'disabled',
-                                                                'error': 'Account not active.'})
+                                                                'error_type': 'disabled'})
             else:
                 # Password incorrect
                 return render(request, self.template_name, {'form': self.login_form,
-                                                            'error_type': 'password',
-                                                            'error': 'Password incorrect.'})
+                                                            'error_type': 'password'})
         else:
             # recaptcha not completed or botcatcher textbox filled out - we have a bot
             return render(request, self.template_name, {'form': self.login_form,
-                                                        'error_type': 'recaptcha',
-                                                        'error': 'Please complete reCAPTCHA verification.'})
+                                                        'error_type': 'recaptcha'})
 
 
 class LogoutView(LoginRequiredMixin, TemplateView):
