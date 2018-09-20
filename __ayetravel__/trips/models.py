@@ -24,9 +24,9 @@ class Trips(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     files = models.FileField(upload_to='trips/trip_files', null=True, blank=True)
-    comments = models.ForeignKey('Comments', on_delete=models.CASCADE)
-    pins = models.ForeignKey('Pins', on_delete=models.CASCADE)
-    participants = models.ForeignKey('Participants', on_delete=models.CASCADE)
+    comments_obj = models.ForeignKey('Comments', on_delete=models.CASCADE)
+    pins_obj = models.ForeignKey('Pins', on_delete=models.CASCADE)
+    participants_obj = models.ForeignKey('Participants', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'trip'
