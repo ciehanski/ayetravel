@@ -2,7 +2,7 @@ from django import forms
 from trips.models import Trips
 
 
-class CreateTripForm(forms.ModelForm):
+class CreateTripForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(
                             attrs={'class': 'form-control',
                                    'type': 'text',

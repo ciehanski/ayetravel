@@ -48,7 +48,7 @@
                                         Name your trip something fun!
                                     </p>
 
-                                    {{ name }}
+                                    {{ form.name }}
                                     <span class="font-13 text-muted">e.g "Fucking Reno!"</span>
 
                                 </div> <!-- end col -->
@@ -59,7 +59,7 @@
                                         How much are you looking to spend on this trip?
                                     </p>
 
-                                    {{ budget }}
+                                    {{ form.budget }}
                                     <span class="font-13 text-muted">e.g $3,800</span>
 
                                 </div> <!-- end col -->
@@ -69,7 +69,7 @@
                                     <p class="text-muted font-14">
                                         Your address or city will work.
                                     </p>
-                                    {{ user_location }}
+                                    {{ form.user_location }}
                                     <span class="font-13 text-muted">e.g "Chicago, IL"</span>
                                 </div> <!-- end col -->
 
@@ -78,7 +78,7 @@
                                     <p class="text-muted font-14">
                                         Hopefully somewhere warm!
                                     </p>
-                                    {{ destination }}
+                                    {{ form.destination }}
                                     <span class="font-13 text-muted">e.g "San Fransisco, CA"</span>
                                 </div> <!-- end col -->
 
@@ -103,7 +103,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label>Start Date</label>
-                                        {{ start_date }}
+                                        {{ form.start_date }}
                                         <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label>End Date</label>
-                                        {{ end_date }}
+                                        {{ form.end_date }}
                                         <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
                                 <p class="text-muted font-13">
                                     List all the things you'll need for this job.
                                 </p>
-                                {{ packing_list }}
+                                {{ form.packing_list }}
                             </div>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                                 Would you like to make your trip public to the community?
                             </p>
                             <!-- Success Switch-->
-                            {{ public }}
+                            {{ form.public }}
                             <label for="switch3" data-off-label="No" data-on-label="Yes"></label>
                         </div> <!-- end card-body -->
                     </div> <!-- end card-->
