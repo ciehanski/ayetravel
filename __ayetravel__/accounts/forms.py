@@ -10,6 +10,7 @@ class LoginForm(forms.Form):
                                                   'id': 'username_textbox',
                                                   'type': 'text',
                                                   'name': 'username_textbox',
+                                                  'aria-describedby': 'inputGroupPrepend',
                                                   }))
 
     botcatcher = forms.CharField(required=False, validators=[validators.MaxLengthValidator(0)],

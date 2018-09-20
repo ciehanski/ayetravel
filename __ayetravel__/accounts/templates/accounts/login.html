@@ -31,26 +31,26 @@
                             <div class="card-body p-4">
                                 <form action="." method="POST">
                                     {% csrf_token %}
-
-                                    {% if error %}
-                                        
+                                    {% if form.errors %}
                                     <div class="form-group">
                                         <label for="username_textbox">Username</label>
-
                                         {{ form.username_textbox }}
-
                                         {% if error_type == 'username' %}
                                             <div class="invalid-feedback">
-                                                Not a valid username.
+                                                Username is invalid.
                                             </div>
                                         {% endif %}
-
                                     </div>
 
                                     <div class="form-group">
                                         <label for="password_textbox">Password</label>
                                         <a href="{% url "accounts:recovery" %}" class="text-muted float-right" tabindex="-1"><small>Forgot your password?</small></a>
                                         {{ form.password_textbox }}
+                                        {% if error_type == 'password' %}
+                                            <div class="invalid-feedback">
+                                                Password is incorrect.
+                                            </div>
+                                        {% endif %}
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -60,12 +60,16 @@
                                         </div>
                                     </div>
                                     <center><div class="g-recaptcha" data-sitekey="6Lcxam4UAAAAAOx-9RWDxhalnW1ZIPzoQU5x4M9x"></div></center>
+                                    {% if error_type == 'recaptcha' %}
+                                        <div class="invalid-feedback">
+                                            Please fill out reCAPTCHA form.
+                                        </div>
+                                    {% endif %}
                                     </br>
                                     <div class="form-group mb-0 text-center">
                                         <button class="btn btn-primary" type="submit"> Log In </button>
                                     </div>
                                     {% endif %}
-
                                 </form>
                             </div> <!-- end card-body -->
                         </div>
