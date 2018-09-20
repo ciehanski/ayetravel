@@ -41,6 +41,8 @@ class Trips(models.Model):
             return 'coming_up'
         elif self.end_date > datetime.date.today():
             return 'completed'
+        else:
+            return 'started_today'
 
     def __str__(self):
         return str(f'Trip ID: ' + str(self.pk) + ' "' + self.name + '"' + ' created by '
