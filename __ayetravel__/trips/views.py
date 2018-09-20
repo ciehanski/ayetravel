@@ -17,6 +17,10 @@ class TripsDetailed(IndexView, DetailView):
         context['trips'] = self.clean_object(request)
         return render(request, self.template_name, context)
 
+    def get_object(self, queryset=Trips):
+        slug_ = self.kwargs.get('slug')
+        return get_object_or_404(Trips, slug=slug_)
+
     def clean_object(self, request):
         slug_ = self.kwargs.get('slug')
         obj = self.get_object()

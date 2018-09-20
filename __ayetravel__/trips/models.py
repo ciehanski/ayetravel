@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from ayetravel.utils import unique_slug_generator
 from django.db.models.signals import pre_save
+import datetime
 
 
 class Trips(models.Model):
@@ -32,6 +33,14 @@ class Trips(models.Model):
         #     ("view_trip", "Can view this specific trip."),
         #     ("modify_trip", "Can modify this specific trip."),
         #     ("delete_trip", "Can remove this specific trip."))
+
+    def get_status(self):
+        if self.start_date > datetime.date.today():
+            return 'in_progress'
+        elif self.start_date < datetime.date.today():
+            return 'coming_up'
+        elif self.end_date > datetime.date.today():
+            return 'completed'
 
     def __str__(self):
         return str(f'Trip ID: ' + str(self.pk) + ' "' + self.name + '"' + ' created by '

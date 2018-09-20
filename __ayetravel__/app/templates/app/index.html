@@ -117,8 +117,14 @@
                                     <!-- project title-->
                                     <h4 class="mt-0">
                                         <a href="my/trips/{{ trip.slug }}" class="text-dark">{{ trip.name }}</a>
+                                        {% if trip.get_status == 'in_progress' %}
+                                            <div class="badge badge-success badge-pill">In Progress</div>
+                                        {% elif trip.get_status == 'coming_up' %}
+                                            <div class="badge badge-primary badge-pill">Coming Up</div>
+                                        {% elif trip.get_status == 'completed' %}
+                                            <div class="badge badge-info badge-pill">Completed</div>
+                                        {% endif %}
                                     </h4>
-                                    <div class="badge badge-success mb-3">Finished</div>
 
                                     <p class="text-muted font-13 mb-3">
                                         From: {{ trip.user_location }} <br>
@@ -201,12 +207,12 @@
                                         <a href="community/trips/{{ trip.slug }}" class="text-dark">{{ trip.name }}</a>
                                     </h4>
 
-                                    {% if trip.start_date > datetime.datetime.date %}
-                                        <div class="badge badge-success mb-3">Started</div>
-                                    {% elif trip.end_date > datetime.datetime.date %}
-                                        <div class="badge badge-success mb-3">Ended</div>
-                                    {% else %}
-                                        <div class="badge badge-success mb-3">Planning</div>
+                                    {% if trip.get_status == 'in_progress' %}
+                                        <div class="badge badge-success badge-pill">In Progress</div>
+                                    {% elif trip.get_status == 'coming_up' %}
+                                        <div class="badge badge-primary badge-pill">Coming Up</div>
+                                    {% elif trip.get_status == 'completed' %}
+                                        <div class="badge badge-info badge-pill">Completed</div>
                                     {% endif %}
 
                                     <p class="text-muted font-13 mb-3">
