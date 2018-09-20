@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from trips.models import Trips
@@ -11,7 +10,7 @@ class CommunityTripsList(IndexView, ListView):
     object_list = Trips.objects.all()
 
 
-class CommunityTripsDetailed(LoginRequiredMixin, DetailView):
+class CommunityTripsDetailed(IndexView, DetailView):
     context_object_name = 'community_trips_detailed'
     template_name = 'trips/trips_detailed.html'
     object = Trips

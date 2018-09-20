@@ -6,7 +6,7 @@ class CreateTripForm(forms.ModelForm):
     class Meta:
         model = Trips
         fields = ('name', 'budget', 'user_location', 'destination', 'start_date',
-                  'end_date', 'packing_list', 'public')
+                  'end_date', 'packing_list', 'public', 'files')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control',
                                            'type': 'text',
@@ -42,6 +42,7 @@ class CreateTripForm(forms.ModelForm):
             'public': forms.CheckboxInput(attrs={'type': 'checkbox',
                                                  'id': 'switch3',
                                                  'checked data-switch': 'success'}),
-            # 'files': forms.FileInput(),
-            # 'picture': forms.FileInput(),
+            'files': forms.FileInput(attrs={'name': 'file',
+                                            'type': 'file',
+                                            'multiple': ''}),
         }
