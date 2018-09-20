@@ -6,20 +6,24 @@ class CreateTripForm(forms.ModelForm):
     class Meta:
         model = Trips
         fields = ('name', 'budget', 'user_location', 'destination', 'start_date',
-                  'end_date', 'packing_list', 'public', 'files', 'picture')
+                  'end_date', 'packing_list', 'public')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control',
                                            'type': 'text',
-                                           'data-toggle': 'input-mask'}),
+                                           'data-toggle': 'input-mask',
+                                           'placeholder': 'Name'}),
             'budget': forms.NumberInput(attrs={'class': 'form-control',
                                                'type': 'text',
-                                               'data-toggle': 'input-mask'}),
+                                               'data-toggle': 'input-mask',
+                                               'placeholder': '0'}),
             'user_location': forms.TextInput(attrs={'class': 'form-control',
                                                     'type': 'text',
-                                                    'data-toggle': 'input-mask'}),
+                                                    'data-toggle': 'input-mask',
+                                                    'placeholder': 'Drop your pin'}),
             'destination': forms.TextInput(attrs={'class': 'form-control',
                                                   'type': 'text',
-                                                  'data-toggle': 'input-mask'}),
+                                                  'data-toggle': 'input-mask',
+                                                  'placeholder': 'Destination'}),
             'start_date': forms.DateInput(attrs={'type': 'text',
                                                  'class': 'form-control date',
                                                  'id': 'singledaterange',
@@ -38,6 +42,6 @@ class CreateTripForm(forms.ModelForm):
             'public': forms.CheckboxInput(attrs={'type': 'checkbox',
                                                  'id': 'switch3',
                                                  'checked data-switch': 'success'}),
-            'files': forms.FileInput(),
-            'picture': forms.FileInput(),
+            # 'files': forms.FileInput(),
+            # 'picture': forms.FileInput(),
         }

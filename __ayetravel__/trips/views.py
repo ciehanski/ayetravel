@@ -10,6 +10,7 @@ class TripsDetailed(IndexView, DetailView):
     context_object_name = 'trips_detailed'
     template_name = 'trips/trips_detailed.html'
     queryset = Trips.objects.all()
+    object = Trips
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
