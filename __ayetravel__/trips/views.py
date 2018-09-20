@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, DeleteView, ListView, FormView
+from django.views.generic import DetailView, UpdateView, DeleteView, ListView, CreateView
 from trips.forms import CreateTripForm
 from trips.models import Trips
 from app.views import IndexView
@@ -26,9 +26,10 @@ class TripsDetailed(IndexView, DetailView):
                                                              'do not have permissions to view.'})
 
 
-class CreateTrip(IndexView, FormView):
+class CreateTrip(IndexView, CreateView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
+    model = Trips
     form_class = CreateTripForm
 
     def form_valid(self, form):

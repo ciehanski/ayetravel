@@ -5,7 +5,8 @@ from trips.models import Trips
 class CreateTripForm(forms.ModelForm):
     class Meta:
         model = Trips
-        fields = '__all__'
+        fields = ['name', 'budget', 'user_location', 'destination', 'start_date',
+                  'end_date', 'packing_list', 'public', 'files', 'picture']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control',
                                            'type': 'text',
