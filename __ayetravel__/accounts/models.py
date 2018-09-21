@@ -89,9 +89,9 @@ def create_userprofile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user_id=instance, receive_emails=True)
 
 
-@receiver(post_save, sender=User)
-def delete_userprofile(sender, instance, **kwargs):
-    instance.userprofile.delete()
+# @receiver(post_save, sender=User)
+# def delete_userprofile(sender, instance, **kwargs):
+#     instance.userprofile.delete()
 
 
 @receiver(post_save, sender=User)
