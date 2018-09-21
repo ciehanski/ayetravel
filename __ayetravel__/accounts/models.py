@@ -1,7 +1,8 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
-from trips.models import Trips
-from django.db.models.signals import post_save
+from trips.models import Trips, Pins, Comments
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 
@@ -42,58 +43,51 @@ class UserNotifications(models.Model):
         verbose_name_plural = 'notifications'
 
     # TODO build out notification system
-    def create_notification(self, instance, message):
-        UserNotifications.objects.create(user_id=instance, message=message).save()
+    def create_notification(self, user, message_):
+        UserNotifications.objects.create(user_id=user, message=message_).save()
 
     def read_notification(self):
         self.read = True
         self.save()
 
-    def delete_notification(self, id_):
-        UserNotifications.objects.delete(id=id_).save()
+    def delete_notification(self, pk_):
+        UserNotifications.objects.delete(pk=pk_).save()
 
     def __str__(self):
         return str('"' + self.message + '"' + ' for the user: ' + self.user_id.get_username())
 
 
-# class UserCalendar(models.Model):
-#     user_id = models.OneToOneField(User, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         verbose_name = 'usercalendar'
-#         verbose_name_plural = 'usercalendars'
-#
-#     def __str__(self):
-#         return f'Calendar data for the user: {self.user_id.get_username()}'
-#
-#
-# @receiver(post_save, sender=User)
-# def create_usercalendar(sender, instance, created, **kwargs):
-#     if created:
-#         UserCalendar.objects.create(user_id=instance)
-#
-#
-# @receiver(post_save, sender=User)
-# def save_usercalendar(sender, instance, **kwargs):
-#     instance.usercalendar.save()
-#
-#
-# @receiver(post_save, sender=User)
-# def delete_usercalendar(sender, instance, **kwargs):
-#     instance.usercalendar.delete()
+class UserCalendar(models.Model):
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'usercalendar'
+        verbose_name_plural = 'usercalendars'
+
+    def __str__(self):
+        return f'Calendar data for the user: {self.user_id.get_username()}'
 
 
 @receiver(post_save, sender=User)
-def create_userprofile(sender, instance, created, **kwargs):
+def save_or_create_userprofile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user_id=instance, receive_emails=True)
+        UserProfile.objects.get_or_create(user_id=instance)
+        UserCalendar.objects.get_or_create(user_id=instance)
+        UserNotifications.objects.get_or_create(user_id=instance,
+                                                message='Welcome to ayetravel, create your first trip!',
+                                                timestamp=datetime.datetime.now())
+    instance.userprofile.save()
 
-# TODO add in these features
-# @receiver(post_save, sender=User)
-# def delete_userprofile(sender, instance, **kwargs):
-#     instance.userprofile.delete()
-#
-#
-# @receiver(post_save, sender=User)
-# def save_userprofile(sender, instance, **kwargs):
-#     instance.userprofile.save()
+
+@receiver(post_delete, sender=User)
+def delete_userprofile(sender, instance, **kwargs):
+    instance.userprofile.delete()
+    instance.usercalendar.delete()
+    for trip in Trips.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
+        trip.delete()
+    for comment in Comments.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
+        comment.delete()
+    for pin in Pins.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
+        pin.delete()
+    for notif in UserNotifications.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
+        notif.delete()

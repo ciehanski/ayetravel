@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from accounts import forms
+from accounts.forms import LoginForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -9,13 +9,13 @@ from urllib.request import urlopen
 import json
 from django.views.generic import TemplateView, FormView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.views import render_user_trips, render_user_notifications, IndexView
+from app.views import IndexView
 
 
 class LoginView(FormView):
     context_object_name = 'login'
     template_name = 'accounts/login.html'
-    login_form = forms.LoginForm()
+    login_form = LoginForm()
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -91,13 +91,3 @@ class RecoveryView(LoginRequiredMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
-
-
-def render_profile(request):
-    current_user = ''
-    for user in User.objects.all():
-        if request.get_raw_uri().__contains__(user.get_username()):
-            current_user = user
-            break
-    return current_user
-

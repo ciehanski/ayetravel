@@ -47,43 +47,39 @@ class CalendarView(IndexView, TemplateView):
 
 def render_user_notifications(request):
     notifs = []
-    for notif in UserNotifications.objects.all():
-        if notif.user_id.get_username() == request.user.get_username():
-            notifs.append(notif)
+    for notif in UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()):
+        notifs.append(notif)
     return notifs
 
 
 def render_user_trips(request):
     trips = []
-    for trip in Trips.objects.all():
-        if trip.user_id.get_username() == request.user.get_username():
-            trips.append(trip)
+    for trip in Trips.objects.all().filter(user_id__username__iexact=request.user.get_username()):
+        trips.append(trip)
     return trips
 
 
 def render_user_trip_detail(request):
     trips = []
     for trip in Trips.objects.all():
-        if trip.user_id.get_username() == request.user.get_username() or trip.public:
+        if trip.user_id.username == request.user.get_username() or trip.public:
             trips.append(trip)
     return trips
 
 
 def render_community_trips(request):
     community_trips = []
-    for trip in Trips.objects.all():
-        if trip.public:
-            if trip.user_id.get_username() != request.user.get_username():
-                community_trips.append(trip)
+    for trip in Trips.objects.all().filter(public=True):
+        if trip.user_id.username != request.user.get_username():
+            community_trips.append(trip)
     return community_trips
 
 
 def render_pins(request):
     pins = []
-    for pin in UserProfile.objects.all():
-        if pin.user_id.get_username() == request.user.get_username():
-            if len(pin.user_id.userprofile.pins) > 0:
-                pins.append(pin)
+    for pin in UserProfile.objects.all().filter(user_id__username__iexact=request.user.get_username()):
+        if len(pin.user_id.userprofile.pins) > 0:
+            pins.append(pin)
     return pins
 
 

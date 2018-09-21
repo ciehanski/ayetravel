@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.shortcuts import get_object_or_404, redirect
+from django.dispatch import receiver
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from ayetravel.utils import unique_slug_generator
 from django.db.models.signals import pre_save
@@ -38,18 +39,11 @@ class Trips(models.Model):
         #     ("modify_trip", "Can modify this specific trip."),
         #     ("delete_trip", "Can remove this specific trip."))
 
-    def get_comments(self):
-        all_com = []
-        for comment in Comments.objects.all():
-            if comment.trip.pk == self.pk:
-                all_com += comment
-        return all_com
-
     # TODO create comment form
     # def add_comment(self, request, trip_pk):
     #     trip = get_object_or_404(Trips, pk=trip_pk)
     #     if request.method == 'POST':
-    #         # form = CommentForm(request.POST)
+    #         form = CommentForm(request.POST)
     #         if form.is_valid():
     #             comment = form.save(commit=False)
     #             comment.trip = trip
@@ -60,28 +54,41 @@ class Trips(models.Model):
     #         form = CommentForm()
     #     return render(request, 'trips/trips_detailed.html', {'form': form})
 
-    def add_pin(self, pin):
-        pin.trip = self
+    def add_pin(self, user):
+        # create pin and add it to my list of pin objects in trip, add tally to pin total
+        self.pins_obj += Pins.objects.create(user_id=user, trip=self).save()
         self.pins_total += 1
         self.save()
 
     def add_participant(self, user):
+        # create participant and add it to my list of participant objects in trip, add tally to participant total
+        self.participants_obj += Participants.objects.create(user_id=user, trip=self).save()
         self.participants_total += 1
         self.save()
 
+    def get_participants(self):
+        all_participants = []
+        for participants in Participants.objects.all().filter(trip_id__exact=self.id):
+            all_participants += participants
+        return all_participants
+
+    def get_comments(self):
+        all_com = []
+        for comment in Comments.objects.all().filter(trip_id__exact=self.id):
+            all_com += comment
+        return all_com
+
     def get_status(self):
-        if self.start_date > datetime.date.today():
+        if self.start_date <= datetime.date.today() and not self.end_date >= datetime.date.today():
             return 'in_progress'
-        elif self.start_date < datetime.date.today():
+        elif self.start_date > datetime.date.today():
             return 'coming_up'
-        elif self.end_date > datetime.date.today():
+        elif self.end_date < datetime.date.today():
             return 'completed'
-        else:
-            return 'started_today'
 
     def __str__(self):
         return str(f'Trip ID: ' + str(self.pk) + ' "' + self.name + '"' + ' created by '
-                   + str(self.user_id.get_username()))
+                   + str(self.user_id.username))
 
     def get_absolute_url(self):
         return reverse('trips:trips_detailed', kwargs={'slug': self.slug})
@@ -99,7 +106,7 @@ class Comments(models.Model):
 
     def __str__(self):
         return str(f'Comment ID: ' + str(self.pk) + ' "' + self.message + '"' + ' created by '
-                   + str(self.user_id.get_username()) + ' left on Trip ID: ' + self.trip.pk)
+                   + str(self.user_id.username) + ' left on Trip ID: ' + self.trip.pk)
 
     def get_absolute_url(self):
         return reverse('trips:trips_detailed', kwargs={'slug': self.trip.slug})
@@ -116,7 +123,10 @@ class Pins(models.Model):
 
     def __str__(self):
         return str(f'Pin ID: ' + str(self.pk) + ' for trip: '
-                   + '"' + self.trip.name + '"' + 'left by user: ' + self.user_id.get_username())
+                   + '"' + self.trip.name + '"' + 'left by user: ' + self.user_id.username)
+
+    def get_absolute_url(self):
+        return reverse('trips:trips_detailed', kwargs={'slug': self.trip.slug})
 
 
 class Participants(models.Model):
@@ -128,12 +138,13 @@ class Participants(models.Model):
         verbose_name_plural = 'participants_total'
 
     def __str__(self):
-        return str(f'Participant: ' + self.user_id.get_username() + " for trip: " + self.trip.pk)
+        return str(f'Participant: ' + self.user_id.username + " for trip: " + self.trip.pk)
+
+    def get_absolute_url(self):
+        return reverse('accounts:profile', kwargs={'username': self.user_id.username})
 
 
-def pre_save_receiver(sender, instance, *args, **kwargs):
+@receiver(pre_save, sender=Trips)
+def gen_slug(sender, instance, *args, **kwargs):
     if instance.slug == '':
         instance.slug = unique_slug_generator(instance)
-
-
-pre_save.connect(pre_save_receiver, sender=Trips)
