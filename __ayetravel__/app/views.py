@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from trips.models import Trips
+from trips.models import Trips, Pins
 from accounts.models import UserNotifications, UserProfile
+from django import template
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -45,21 +46,27 @@ class CalendarView(IndexView, TemplateView):
     template_name = 'app/calendar.html'
 
 
-def render_user_notifications(request):
+register = template.Library()
+
+
+@register.simple_tag
+def notifications_tag(request):
     notifs = []
     for notif in UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()):
         notifs.append(notif)
     return notifs
 
 
-def render_user_trips(request):
+@register.simple_tag
+def user_trips(request):
     trips = []
     for trip in Trips.objects.all().filter(user_id__username__iexact=request.user.get_username()):
         trips.append(trip)
     return trips
 
 
-def render_user_trip_detail(request):
+@register.simple_tag
+def trips_detail_tag(request):
     trips = []
     for trip in Trips.objects.all():
         if trip.user_id.username == request.user.get_username() or trip.public:
@@ -67,20 +74,21 @@ def render_user_trip_detail(request):
     return trips
 
 
-def render_community_trips(request):
-    community_trips = []
+@register.simple_tag
+def community_trips(request):
+    com_trips = []
     for trip in Trips.objects.all().filter(public=True):
         if trip.user_id.username != request.user.get_username():
-            community_trips.append(trip)
-    return community_trips
+            com_trips.append(trip)
+    return com_trips
 
 
-def render_pins(request):
-    pins = []
-    for pin in UserProfile.objects.all().filter(user_id__username__iexact=request.user.get_username()):
-        if len(pin.user_id.userprofile.pins) > 0:
-            pins.append(pin)
-    return pins
+@register.simple_tag
+def pins_tag(request):
+    pins_ = []
+    for pin in Pins.objects.all().filter(user_id__username__iexact=request.user.get_username()):
+        pins_.append(pin)
+    return pins_
 
 
 def handler404(request):
