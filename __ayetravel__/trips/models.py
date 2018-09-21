@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from ayetravel.utils import unique_slug_generator
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 import datetime
 
 
@@ -142,6 +142,37 @@ class Participants(models.Model):
 
     def get_absolute_url(self):
         return reverse('accounts:profile', kwargs={'username': self.user_id.username})
+
+
+class DailyLog(models.Model):
+    trip = models.OneToOneField(Trips, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'dailylog'
+
+
+class Excursions(models.Model):
+    trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'excursion'
+        verbose_name_plural = 'excursions'
+
+
+class Itinerary(models.Model):
+    trip = models.OneToOneField(Trips, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'itinerary'
+
+
+@receiver(post_save, sender=Trips)
+def save_or_create_user_objs(sender, instance, created, **kwargs):
+    if created:
+        Itinerary.objects.get_or_create(user_id=instance)
+        DailyLog.objects.get_or_create(user_id=instance)
+    instance.itinerary.save()
+    instance.dailylog.save()
 
 
 @receiver(pre_save, sender=Trips)

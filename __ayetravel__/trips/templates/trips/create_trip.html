@@ -149,7 +149,7 @@
                             </p>
 
                             <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
-                                data-upload-preview-template="#uploadPreviewTemplate">
+                                data-upload-preview-template="#uploadPreviewTemplate" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="fallback">
                                     {{ form.files }}
@@ -187,7 +187,7 @@
 
 {% block scipts_block %}
     <!-- Dropzone js -->
-    <script src="app/js/vendor/dropzone.min.js"></script>
+    <script src="{% static 'app/js/vendor/dropzone.min.js' %}"></script>
     <!-- File upload js -->
     <script src="{% static 'app/js/ui/component.fileupload.js' %}"></script>
 {% endblock %}
