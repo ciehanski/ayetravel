@@ -15,6 +15,7 @@ class UserProfile(models.Model):
     age = models.IntegerField(default=0)
     pins = models.IntegerField(default=0)
     private_account = models.BooleanField(default=False)
+    timezone = models.CharField(max_length=3, default='UTC')
 
     class Meta:
         verbose_name = 'userprofile'
