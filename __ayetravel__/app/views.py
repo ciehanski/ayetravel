@@ -6,7 +6,7 @@ from accounts.models import UserNotifications, UserProfile
 from django import template
 
 
-class BaseViewMixin(object, LoginRequiredMixin):
+class BaseViewMixin(LoginRequiredMixin, object):
     context_object_name = 'base'
     template_name = 'app/base.html'
 
