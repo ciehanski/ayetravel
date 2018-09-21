@@ -125,7 +125,7 @@
                                             <span class="float-right">
                                                 <a href="javascript: void(0);" class="text-dark">
                                                     {% if notifs_total > 0 %}
-                                                    <small>Clear All</small>
+                                                        <small>Clear All</small>
                                                     {% endif %}
                                                 </a>
                                             </span>Notifications for {{ user.get_username }}
@@ -134,8 +134,8 @@
 
                                     <div class="slimscroll" style="max-height: 230px;">
 
-                                    {% if notifs_total > 0 %}
-                                    {% for notif in notifs %}
+                                    {% if notifications|length > 0 %}
+                                    {% for notif in notifications %}
                                         <!-- item-->
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                                             <div class="notify-icon bg-primary">

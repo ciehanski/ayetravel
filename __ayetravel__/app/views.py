@@ -6,15 +6,14 @@ from accounts.models import UserNotifications, UserProfile
 from django import template
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
-    context_object_name = 'index'
-    template_name = 'app/index.html'
+class BaseViewMixin(object, LoginRequiredMixin):
+    context_object_name = 'base'
+    template_name = 'app/base.html'
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['notifs'] = notifications_tag(request)
         context['trips_total'] = len(user_trips(request))
-        context['notifs_total'] = len(notifications_tag(request))
+        context['notifs_total'] = len(notifications(request))
         # Search handling
         search_term = request.GET.get('search')
         if search_term is not None:
@@ -33,13 +32,18 @@ class IndexView(LoginRequiredMixin, TemplateView):
             return render(request, self.template_name, context)
 
 
-class SearchView(IndexView, ListView):
+class IndexView(BaseViewMixin, TemplateView):
+    context_object_name = 'index'
+    template_name = 'app/index.html'
+
+
+class SearchView(BaseViewMixin, ListView):
     context_object_name = 'search'
     template_name = 'app/search.html'
     object_list = Trips.objects.all()
 
 
-class CalendarView(IndexView, TemplateView):
+class CalendarView(BaseViewMixin, TemplateView):
     context_object_name = 'calendar'
     template_name = 'app/calendar.html'
 
@@ -48,7 +52,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def notifications_tag(request):
+def notifications(request):
     notifs = []
     for notif in UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()):
         notifs.append(notif)
