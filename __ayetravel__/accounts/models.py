@@ -1,4 +1,3 @@
-import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from trips.models import Trips, Pins, Comments
@@ -29,7 +28,7 @@ class UserProfile(models.Model):
             return 'media/profile_pictures/default.png'
 
     def __str__(self):
-        return f'User profile & settings for the user: {self.user_id.get_username()}'
+        return f'User profile & settings for the user: {self.user_id.username}'
 
 
 class UserNotifications(models.Model):
@@ -44,17 +43,17 @@ class UserNotifications(models.Model):
 
     # TODO build out notification system
     def create_notification(self, user, message_):
-        UserNotifications.objects.create(user_id=user, message=message_).save()
+        UserNotifications.objects.create(user_id=user, message=message_)
 
     def read_notification(self):
         self.read = True
         self.save()
 
     def delete_notification(self, pk_):
-        UserNotifications.objects.delete(pk=pk_).save()
+        UserNotifications.objects.delete(pk=pk_)
 
     def __str__(self):
-        return str('"' + self.message + '"' + ' for the user: ' + self.user_id.get_username())
+        return str('"' + self.message + '"' + ' for the user: ' + self.user_id.username)
 
 
 class UserCalendar(models.Model):
@@ -65,24 +64,22 @@ class UserCalendar(models.Model):
         verbose_name_plural = 'usercalendars'
 
     def __str__(self):
-        return f'Calendar data for the user: {self.user_id.get_username()}'
+        return f'Calendar data for the user: {self.user_id.username}'
 
 
 @receiver(post_save, sender=User)
-def save_or_create_userprofile(sender, instance, created, **kwargs):
+def save_or_create_user_objs(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.get_or_create(user_id=instance)
         UserCalendar.objects.get_or_create(user_id=instance)
-        UserNotifications.objects.get_or_create(user_id=instance,
-                                                message='Welcome to ayetravel, create your first trip!',
-                                                timestamp=datetime.datetime.now())
-    instance.userprofile.save()
+    # instance.userprofile.save()
+    # instance.usercalendar.save()
 
 
 @receiver(post_delete, sender=User)
-def delete_userprofile(sender, instance, **kwargs):
-    instance.userprofile.delete()
-    instance.usercalendar.delete()
+def delete_user_objs(sender, instance, **kwargs):
+    # instance.userprofile.delete()
+    # instance.usercalendar.delete()
     for trip in Trips.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
         trip.delete()
     for comment in Comments.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
