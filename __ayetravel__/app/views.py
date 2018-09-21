@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from trips.models import Trips, Pins
-from accounts.models import UserNotifications, UserProfile
+from accounts.models import UserNotifications
 from django import template
 
 
