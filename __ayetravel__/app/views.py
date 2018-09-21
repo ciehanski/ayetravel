@@ -74,7 +74,7 @@ def trips_detail_tag(request):
     return trips
 
 
-@register.simple_tag
+@register.simple_tag(name='community_trips')
 def community_trips(request):
     com_trips = []
     for trip in Trips.objects.all().filter(public=True):
