@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from ayetravel.utils import unique_slug_generator
 from django.db.models.signals import pre_save
@@ -44,10 +45,20 @@ class Trips(models.Model):
                 all_com += comment
         return all_com
 
-    def add_comment(self, comment):
-        comment.trip = self
-        self.comments_total += 1
-        self.save()
+    # TODO create comment form
+    # def add_comment(self, request, trip_pk):
+    #     trip = get_object_or_404(Trips, pk=trip_pk)
+    #     if request.method == 'POST':
+    #         # form = CommentForm(request.POST)
+    #         if form.is_valid():
+    #             comment = form.save(commit=False)
+    #             comment.trip = trip
+    #             comment.save()
+    #             self.comments_total += 1
+    #             return redirect('trips:trips_detailed', slug=trip.slug)
+    #     else:
+    #         form = CommentForm()
+    #     return render(request, 'trips/trips_detailed.html', {'form': form})
 
     def add_pin(self, pin):
         pin.trip = self
