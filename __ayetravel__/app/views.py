@@ -12,11 +12,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['community_trips'] = render_community_trips(request)
-        context['trips'] = render_user_trips(request)
-        context['notifs'] = render_user_notifications(request)
-        context['trips_total'] = len(render_user_trips(request))
-        context['notifs_total'] = len(render_user_notifications(request))
+        context['notifs'] = notifications_tag(request)
+        context['trips_total'] = len(user_trips(request))
+        context['notifs_total'] = len(notifications_tag(request))
         # Search handling
         search_term = request.GET.get('search')
         if search_term is not None:
