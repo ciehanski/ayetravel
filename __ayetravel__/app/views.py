@@ -49,7 +49,7 @@ class CalendarView(BaseViewMixin, TemplateView):
 register = template.Library()
 
 
-@register.simple_tag(name='notifications')
+@register.simple_tag(name='notifications', takes_context=True)
 def notifications(request):
     notifs = []
     for notif in UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()):
@@ -57,7 +57,7 @@ def notifications(request):
     return notifs
 
 
-@register.simple_tag(name='user_trips')
+@register.simple_tag(name='user_trips', takes_context=True)
 def user_trips(request):
     trips = []
     for trip in Trips.objects.all().filter(user_id__username__iexact=request.user.get_username()):
@@ -74,7 +74,7 @@ def trips_detail_tag(request):
     return trips
 
 
-@register.simple_tag(name='community_trips')
+@register.simple_tag(name='community_trips', takes_context=True)
 def community_trips(request):
     com_trips = []
     for trip in Trips.objects.all().filter(public=True):

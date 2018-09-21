@@ -23,11 +23,11 @@ class Trips(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     files = models.FileField(upload_to='trips/trip_files', null=True, blank=True)
-    comments_obj = models.ForeignKey('Comments', on_delete=models.CASCADE, default=None)
+    comments_obj = models.ForeignKey('Comments', on_delete=models.CASCADE, blank=True)
     comments_total = models.IntegerField(default=0)
-    pins_obj = models.ForeignKey('Pins', on_delete=models.CASCADE, default=None)
+    pins_obj = models.ForeignKey('Pins', on_delete=models.CASCADE, blank=True)
     pins_total = models.IntegerField(default=0)
-    participants_obj = models.ForeignKey('Participants', on_delete=models.CASCADE, default=None)
+    participants_obj = models.ForeignKey('Participants', on_delete=models.CASCADE, blank=True)
     participants_total = models.IntegerField(default=1)
 
     class Meta:
