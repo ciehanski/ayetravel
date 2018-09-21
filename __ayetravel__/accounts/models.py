@@ -72,14 +72,14 @@ def save_or_create_user_objs(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.get_or_create(user_id=instance)
         UserCalendar.objects.get_or_create(user_id=instance)
-    # instance.userprofile.save()
-    # instance.usercalendar.save()
+    instance.userprofile.save()
+    instance.usercalendar.save()
 
 
 @receiver(post_delete, sender=User)
 def delete_user_objs(sender, instance, **kwargs):
-    # instance.userprofile.delete()
-    # instance.usercalendar.delete()
+    instance.userprofile.delete()
+    instance.usercalendar.delete()
     for trip in Trips.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
         trip.delete()
     for comment in Comments.objects.all().filter(user_id__username__iexact=User.get_username(instance)):

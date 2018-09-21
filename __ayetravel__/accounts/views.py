@@ -83,6 +83,17 @@ class ProfileView(IndexView, DetailView):
     template_name = 'accounts/profile.html'
     object = User
 
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_user'] = self.render_profile(request)
+
+    def render_profile(self, request):
+        current_user = ''
+        for user in User.objects.all().filter(username__iexact=request.user.get_username()):
+            current_user = user
+            break
+        return current_user
+
 
 class RecoveryView(LoginRequiredMixin, FormView):
     context_object_name = 'recovery'

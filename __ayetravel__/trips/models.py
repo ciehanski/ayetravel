@@ -56,13 +56,13 @@ class Trips(models.Model):
 
     def add_pin(self, user):
         # create pin and add it to my list of pin objects in trip, add tally to pin total
-        self.pins_obj += Pins.objects.create(user_id=user, trip=self).save()
+        self.pins_obj += Pins.objects.create(user_id=user, trip=self)
         self.pins_total += 1
         self.save()
 
     def add_participant(self, user):
         # create participant and add it to my list of participant objects in trip, add tally to participant total
-        self.participants_obj += Participants.objects.create(user_id=user, trip=self).save()
+        self.participants_obj += Participants.objects.create(user_id=user, trip=self)
         self.participants_total += 1
         self.save()
 
