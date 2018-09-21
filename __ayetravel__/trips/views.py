@@ -41,6 +41,10 @@ class CreateTrip(IndexView, CreateView):
     def form_valid(self, form):
         new_trip = form.save(commit=False)
         new_trip.save()
+        print('form valid and saved')
+
+    def form_invalid(self, form):
+        print('wtf man')
 
 
 class UpdateTrip(IndexView, UpdateView):
