@@ -86,6 +86,7 @@ class ProfileView(IndexView, DetailView):
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_user'] = self.render_profile(request)
+        return render(request, self.template_name, context)
 
     def render_profile(self, request):
         current_user = ''
