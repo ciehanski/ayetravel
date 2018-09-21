@@ -11,10 +11,8 @@ class BaseViewMixin(LoginRequiredMixin, object):
     template_name = 'app/base.html'
 
     def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['trips_total'] = len(user_trips(request))
-        context['notifs_total'] = len(notifications(request))
         # Search handling
+        context = super().get_context_data(**kwargs)
         search_term = request.GET.get('search')
         if search_term is not None:
             search = Trips.objects.filter(name__icontains=search_term)
@@ -51,7 +49,7 @@ class CalendarView(BaseViewMixin, TemplateView):
 register = template.Library()
 
 
-@register.simple_tag
+@register.simple_tag(name='notifications')
 def notifications(request):
     notifs = []
     for notif in UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()):
@@ -59,7 +57,7 @@ def notifications(request):
     return notifs
 
 
-@register.simple_tag
+@register.simple_tag(name='user_trips')
 def user_trips(request):
     trips = []
     for trip in Trips.objects.all().filter(user_id__username__iexact=request.user.get_username()):

@@ -93,7 +93,7 @@
 
                     <!-- Start Content-->
                     <div class="row">
-                        {% if trips_total > 0 %}
+                        {% if user_trips|length > 0 %}
                         {% for trip in user_trips %}
                         <div class="col-md-6 col-xl-3">
                             <!-- project card -->

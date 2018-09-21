@@ -113,7 +113,7 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <i class="dripicons-bell noti-icon"></i>
-                                    {% if notifs_total > 0 %}
+                                    {% if notifications|length > 0 %}
                                         <span class="noti-icon-badge"></span>
                                     {% endif %}
                                 </a>
@@ -124,7 +124,7 @@
                                         <h5 class="m-0">
                                             <span class="float-right">
                                                 <a href="javascript: void(0);" class="text-dark">
-                                                    {% if notifs_total > 0 %}
+                                                    {% if notifications|length > 0 %}
                                                         <small>Clear All</small>
                                                     {% endif %}
                                                 </a>
