@@ -34,6 +34,7 @@ class CreateTrip(BaseViewMixin, CreateView):
     context_object_name = 'create_trip'
     template_name = 'trips/create_trip.html'
     form_class = CreateTripForm
+    object = Trips
     success_url = reverse_lazy('trips:trips_detailed')
 
     def form_valid(self, form):

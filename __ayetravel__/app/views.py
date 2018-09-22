@@ -1,9 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from trips.models import Trips, Pins
-from accounts.models import UserNotifications
-from django import template
+from trips.models import Trips
 
 
 class BaseViewMixin(LoginRequiredMixin, object):
@@ -44,51 +42,6 @@ class SearchView(BaseViewMixin, ListView):
 class CalendarView(BaseViewMixin, TemplateView):
     context_object_name = 'calendar'
     template_name = 'app/calendar.html'
-
-
-register = template.Library()
-
-
-@register.simple_tag(name='notifications', takes_context=True)
-def notifications(request):
-    notifs = []
-    for notif in UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()):
-        notifs.append(notif)
-    return notifs
-
-
-@register.simple_tag(name='user_trips', takes_context=True)
-def user_trips(request):
-    trips = []
-    for trip in Trips.objects.all().filter(user_id__username__iexact=request.user.get_username()):
-        trips.append(trip)
-    return trips
-
-
-@register.simple_tag
-def trips_detail_tag(request):
-    trips = []
-    for trip in Trips.objects.all():
-        if trip.user_id.username == request.user.get_username() or trip.public:
-            trips.append(trip)
-    return trips
-
-
-@register.simple_tag(name='community_trips', takes_context=True)
-def community_trips(request):
-    com_trips = []
-    for trip in Trips.objects.all().filter(public=True):
-        if trip.user_id.username != request.user.get_username():
-            com_trips.append(trip)
-    return com_trips
-
-
-@register.simple_tag
-def pins_tag(request):
-    pins_ = []
-    for pin in Pins.objects.all().filter(user_id__username__iexact=request.user.get_username()):
-        pins_.append(pin)
-    return pins_
 
 
 def handler404(request):

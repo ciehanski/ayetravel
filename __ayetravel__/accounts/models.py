@@ -4,6 +4,17 @@ from trips.models import Trips, Pins, Comments
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, UserManager
+
+
+class InsensitiveUserManager(UserManager):
+    def get_by_natural_key(self, username):
+        case_insensitive_username_field = '{}__iexact'.format(self.model.USERNAME_FIELD)
+        return self.get(**{case_insensitive_username_field: username})
+
+
+class InsensitiveUser(AbstractUser):
+    objects = InsensitiveUserManager()
 
 
 class UserProfile(models.Model):
