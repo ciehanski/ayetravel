@@ -18,7 +18,7 @@ class InsensitiveUser(AbstractUser):
 
 
 class UserProfile(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(InsensitiveUser, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures', default='profile_pictures/default.png')
     mfa = models.BooleanField(default=False)
     receive_emails = models.BooleanField(default=True)
@@ -43,7 +43,7 @@ class UserProfile(models.Model):
 
 
 class UserNotifications(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
     message = models.CharField(max_length=200, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
@@ -68,7 +68,7 @@ class UserNotifications(models.Model):
 
 
 class UserCalendar(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(InsensitiveUser, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'usercalendar'

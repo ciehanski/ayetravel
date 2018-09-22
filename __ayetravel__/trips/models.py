@@ -3,13 +3,14 @@ from django.db import models
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from accounts.models import InsensitiveUser
 from ayetravel.utils import unique_slug_generator
 from django.db.models.signals import pre_save, post_save
 import datetime
 
 
 class Trips(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=100, unique=True, default='', blank=True)
     name = models.CharField(max_length=50, default='')
     user_location = models.CharField(max_length=100, default='')
@@ -95,7 +96,7 @@ class Trips(models.Model):
 
 
 class Comments(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
     message = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -113,7 +114,7 @@ class Comments(models.Model):
 
 
 class Pins(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -130,7 +131,7 @@ class Pins(models.Model):
 
 
 class Participants(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
 
     class Meta:
