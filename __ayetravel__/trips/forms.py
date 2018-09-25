@@ -1,5 +1,5 @@
 from django import forms
-from trips.models import Trips
+from trips.models import Trips, Comments
 
 
 class CreateTripForm(forms.ModelForm):
@@ -51,4 +51,15 @@ class CreateTripForm(forms.ModelForm):
             'files': forms.FileInput(attrs={'name': 'file',
                                             'type': 'file',
                                             'multiple': ''}),
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ('user_id', 'trip', 'message')
+        widgets = {
+            'name': forms.Textarea(attrs={'class': 'form-control form-control-light mb-2',
+                                          'rows': 3,
+                                          'placeholder': 'Say something nice...'}),
         }

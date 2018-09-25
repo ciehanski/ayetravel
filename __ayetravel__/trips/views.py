@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, DeleteView, ListView, CreateView
-from trips.forms import CreateTripForm
+from trips.forms import CreateTripForm, CommentForm
 from trips.models import Trips
 from app.views import BaseViewMixin
 
@@ -11,23 +11,24 @@ class TripsDetailed(BaseViewMixin, DetailView):
     template_name = 'trips/trips_detailed.html'
     object = Trips
 
-    def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['trips'] = self.cleaned_object(request)
-        return render(request, self.template_name, context)
+    # def get(self, request, *args, **kwargs):
+    #     return render(request, 'trips/trips_detailed.html', {'comment_form': CommentForm()})
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm()
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.trip = request.trip
+            comment.save()
+            comment.trip.comments_total += 1
+            comment.trip.save()
+            return redirect('trips:trips_detailed', slug=request.trip.slug)
+        else:
+            return render(request, 'trips/trips_detailed.html', {'comment_form': form})
 
     def get_object(self, queryset=Trips):
         slug_ = self.kwargs.get('slug')
         return get_object_or_404(Trips, slug=slug_)
-
-    def cleaned_object(self, request):
-        slug_ = self.kwargs.get('slug')
-        obj = self.get_object()
-        if obj.user_id.get_username() == request.user.get_username() or obj.public:
-            return get_object_or_404(Trips, slug=slug_)
-        else:
-            return render(request, 'app/base.html', {'error': 'This is a private trip which you '
-                                                              'do not have permissions to view.'})
 
 
 class CreateTrip(BaseViewMixin, CreateView):
@@ -38,8 +39,8 @@ class CreateTrip(BaseViewMixin, CreateView):
     success_url = reverse_lazy('trips:trips_detailed')
 
     def form_valid(self, form):
-        new_trip = form.save(commit=False)
-        new_trip.save()
+        form.instance.user_id = self.request.user
+        return super().form_valid(form)
 
     def form_invalid(self, form):
         pass
@@ -60,9 +61,6 @@ class DeleteTrip(BaseViewMixin, DeleteView):
     template_name = 'trips/create_trip.html'
     object = Trips
     success_url = reverse_lazy('app:trips_list')
-
-    def post(self, request, *args, **kwargs):
-        pass
 
 
 class TripsList(BaseViewMixin, ListView):

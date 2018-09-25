@@ -1,23 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import User
 from trips.models import Trips, Pins, Comments
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import AbstractUser, UserManager, User
 
 
+# User manager for insensitivity towards cases for username authentication
 class InsensitiveUserManager(UserManager):
     def get_by_natural_key(self, username):
         case_insensitive_username_field = '{}__iexact'.format(self.model.USERNAME_FIELD)
         return self.get(**{case_insensitive_username_field: username})
 
 
+# User object for insensitivity towards cases for username authentication
 class InsensitiveUser(AbstractUser):
     objects = InsensitiveUserManager()
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     user_id = models.OneToOneField(InsensitiveUser, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures', default='profile_pictures/default.png')
     mfa = models.BooleanField(default=False)
@@ -29,9 +29,10 @@ class UserProfile(models.Model):
     timezone = models.CharField(max_length=3, default='UTC')
 
     class Meta:
-        verbose_name = 'userprofile'
-        verbose_name_plural = 'userprofiles'
+        verbose_name = 'profile'
+        verbose_name_plural = 'profiles'
 
+    @property
     def get_profile_picture(self):
         if self.profile_picture:
             return self.profile_picture.url
@@ -52,19 +53,19 @@ class UserNotifications(models.Model):
         verbose_name = 'notification'
         verbose_name_plural = 'notifications'
 
-    # TODO build out notification system
-    def create_notification(self, user, message_):
-        UserNotifications.objects.create(user_id=user, message=message_)
-
     def read_notification(self):
         self.read = True
         self.save()
 
-    def delete_notification(self, pk_):
-        UserNotifications.objects.delete(pk=pk_)
+    def delete_notification(self):
+        self.delete()
 
     def __str__(self):
         return str('"' + self.message + '"' + ' for the user: ' + self.user_id.username)
+
+
+def create_notification(user, message_):
+    UserNotifications.objects.create(user_id=user, message=message_)
 
 
 class UserCalendar(models.Model):
@@ -78,18 +79,18 @@ class UserCalendar(models.Model):
         return f'Calendar data for the user: {self.user_id.username}'
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=InsensitiveUser)
 def save_or_create_user_objs(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.get_or_create(user_id=instance)
+        Profile.objects.get_or_create(user_id=instance)
         UserCalendar.objects.get_or_create(user_id=instance)
-    instance.userprofile.save()
+    instance.profile.save()
     instance.usercalendar.save()
 
 
-@receiver(post_delete, sender=User)
+@receiver(post_delete, sender=InsensitiveUser)
 def delete_user_objs(sender, instance, **kwargs):
-    instance.userprofile.delete()
+    instance.profile.delete()
     instance.usercalendar.delete()
     for trip in Trips.objects.all().filter(user_id__username__iexact=User.get_username(instance)):
         trip.delete()

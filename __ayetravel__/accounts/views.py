@@ -9,7 +9,7 @@ from urllib.request import urlopen
 import json
 from django.views.generic import TemplateView, FormView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.views import IndexView
+from app.views import BaseViewMixin
 
 
 class LoginView(FormView):
@@ -78,22 +78,10 @@ class LogoutView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name)
 
 
-class ProfileView(IndexView, DetailView):
+class ProfileView(BaseViewMixin, DetailView):
     context_object_name = 'profile'
     template_name = 'accounts/profile.html'
     object = User
-
-    def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['current_user'] = self.render_profile(request)
-        return render(request, self.template_name, context)
-
-    def render_profile(self, request):
-        current_user = ''
-        for user in User.objects.all().filter(username__iexact=request.user.get_username()):
-            current_user = user
-            break
-        return current_user
 
 
 class RecoveryView(LoginRequiredMixin, FormView):

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends "app/base.html" %}
 {% load static %}
+{% load base_tags %}
 
 {% block title_block %}
     ayetravel - Dashboard
@@ -86,14 +87,15 @@
             </div>
             <!-- end row-->
 
-
             <div class="page-title-right">
             <h4 class="page-title">    My Trips</h4>
-            </br>
+            <br>
 
                     <!-- Start Content-->
                     <div class="row">
-                        {% if user_trips|length > 0 %}
+                        {% get_total_user_trips request as total_user_trips %}
+                        {% if total_user_trips > 0 %}
+                        {% get_user_trips request as user_trips %}
                         {% for trip in user_trips %}
                         <div class="col-md-6 col-xl-3">
                             <!-- project card -->
@@ -133,7 +135,10 @@
                                         From: {{ trip.user_location }} <br>
                                         Destination: {{ trip.destination }} <br>
                                         Budget: ${{ trip.budget }} <br>
-                                        Participants: {{ trip.participants_total }}
+                                        Participants: {{ trip.participants_total }} <br>
+                                        Start Date: {{ trip.start_date }} <br>
+                                        End Date: {{ trip.end_date }} <br>
+                                        Modified At: {{ trip.modified_at }}
                                     </p>
 
                                     <!-- project detail-->
@@ -147,15 +152,19 @@
                                             <b>{{ trip.comments_total }}</b> Comments
                                         </span>
                                     </p>
+                                    {% if trip.participants_total > 1 %}
                                     <div>
-                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.get_username }}" class="d-inline-block">
-                                            <img src="{{ user.userprofile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="">
+                                        <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.username }}" class="d-inline-block">
+                                            <img src="{{ user.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
                                         </a>
-{##}
-{#                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty" class="d-inline-block">#}
-{#                                            <img src="{% static "app/img/users/avatar-7.jpg" %}" class="rounded-circle avatar-xs" alt="friend">#}
-{#                                        </a>#}
+                                        {% get_participants request as participants %}
+                                        {% for prt in participants %}
+                                        <a href="accounts/{{ prt.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ prt.user_id.username }}" class="d-inline-block">
+                                            <img src="{{ prt.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="friend">
+                                        </a>
+                                        {% endfor %}
                                     </div>
+                                    {% endif %}
                                 </div> <!-- end card-body-->
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item p-3">
@@ -185,6 +194,7 @@
                     <br>
 
                     <div class="row">
+                        {% get_community_trips request as community_trips %}
                         {% for trip in community_trips %}
                         <div class="col-md-6 col-xl-3">
                             <!-- project card -->
@@ -240,8 +250,8 @@
                                         </span>
                                     </p>
                                     <div>
-                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_username }}" class="d-inline-block">
-                                            <img src="{{ trip.user_id.userprofile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="">
+                                        <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.username }}" class="d-inline-block">
+                                            <img src="{{ trip.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
                                         </a>
                                         <!-- TODO create participant model -->
 {#                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.participants_total.get_full_name }}" class="d-inline-block">#}

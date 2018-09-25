@@ -71,7 +71,7 @@
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="{% url "app:community_list" %}" class="side-nav-link">
+                            <a href="{% url "community:community_trips_list" %}" class="side-nav-link">
                                 <i class="dripicons-list"></i>
                                 <span> Community </span>
                                 <span class="menu-arrow"></span>
@@ -114,7 +114,8 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <i class="dripicons-bell noti-icon"></i>
-                                    {% if notifications|length > 0 %}
+                                    {% get_total_user_notifs request as notif_total %}
+                                    {% if notif_total > 0 %}
                                         <span class="noti-icon-badge"></span>
                                     {% endif %}
                                 </a>
@@ -125,7 +126,7 @@
                                         <h5 class="m-0">
                                             <span class="float-right">
                                                 <a href="javascript: void(0);" class="text-dark">
-                                                    {% if notifications|length > 0 %}
+                                                    {% if notif_total > 0 %}
                                                         <small>Clear All</small>
                                                     {% endif %}
                                                 </a>
@@ -135,7 +136,8 @@
 
                                     <div class="slimscroll" style="max-height: 230px;">
 
-                                    {% if notifications|length > 0 %}
+                                    {% if notif_total > 0 %}
+                                    {% get_notifications request as notifications %}
                                     {% for notif in notifications %}
                                         <!-- item-->
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">
@@ -155,7 +157,6 @@
                                             No notifications :(
                                         </div>
                                     {% endif %}
-
                                     </div>
 
                                     <!-- All-->
@@ -169,7 +170,7 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <span class="account-user-avatar">
-                                        <img src="{{ user.userprofile.get_profile_picture }}" alt="" class="rounded-circle">
+                                        <img src="{{ user.profile.get_profile_picture }}" alt="" class="rounded-circle">
                                     </span>
                                     <span>
                                         <span class="account-user-name">{{ user.get_short_name }}</span>

@@ -1,7 +1,13 @@
 from django.test import TestCase
+from django.urls import resolve, reverse
 
-# Create your tests here.
 
+class TestUrls(TestCase):
 
-def test_slug_urls():
-    pass
+    def test_index_url(self):
+        path = reverse('app:index')
+        assert resolve(path).view_name == 'app:index'
+
+    def test_search_url(self):
+        path = reverse('app:search')
+        assert resolve(path).view_name == 'app:search'

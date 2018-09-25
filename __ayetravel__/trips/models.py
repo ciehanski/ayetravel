@@ -1,34 +1,31 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.dispatch import receiver
-from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from accounts.models import InsensitiveUser
 from ayetravel.utils import unique_slug_generator
 from django.db.models.signals import pre_save, post_save
 import datetime
 
 
 class Trips(models.Model):
-    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
+    user_id = models.ForeignKey('accounts.InsensitiveUser', on_delete=models.CASCADE)
     slug = models.SlugField(max_length=100, unique=True, default='', blank=True)
-    name = models.CharField(max_length=50, default='')
-    user_location = models.CharField(max_length=100, default='')
-    destination = models.CharField(max_length=100, default='')
+    name = models.CharField(max_length=50)
+    user_location = models.CharField(max_length=100)
+    destination = models.CharField(max_length=100)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     budget = models.IntegerField(default=0)
     picture = models.ImageField(upload_to='trips/trip_pictures', blank=True, null=True)
     public = models.BooleanField(default=False)
-    packing_list = models.TextField(max_length=2000, default='')
+    packing_list = models.TextField(max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     files = models.FileField(upload_to='trips/trip_files', null=True, blank=True)
-    comments_obj = models.ForeignKey('Comments', on_delete=models.CASCADE, default=None)
+    comments_obj = models.ForeignKey('Comments', on_delete=models.CASCADE, null=True, blank=True)
     comments_total = models.IntegerField(default=0)
-    pins_obj = models.ForeignKey('Pins', on_delete=models.CASCADE, default=None)
+    pins_obj = models.ForeignKey('Pins', on_delete=models.CASCADE, null=True, blank=True)
     pins_total = models.IntegerField(default=0)
-    participants_obj = models.ForeignKey('Participants', on_delete=models.CASCADE, default=None)
+    participants_obj = models.ForeignKey('Participants', on_delete=models.CASCADE, null=True, blank=True)
     participants_total = models.IntegerField(default=1)
 
     class Meta:
@@ -39,21 +36,6 @@ class Trips(models.Model):
         #     ("view_trip", "Can view this specific trip."),
         #     ("modify_trip", "Can modify this specific trip."),
         #     ("delete_trip", "Can remove this specific trip."))
-
-    # TODO create comment form
-    # def add_comment(self, request, trip_pk):
-    #     trip = get_object_or_404(Trips, pk=trip_pk)
-    #     if request.method == 'POST':
-    #         form = CommentForm(request.POST)
-    #         if form.is_valid():
-    #             comment = form.save(commit=False)
-    #             comment.trip = trip
-    #             comment.save()
-    #             self.comments_total += 1
-    #             return redirect('trips:trips_detailed', slug=trip.slug)
-    #     else:
-    #         form = CommentForm()
-    #     return render(request, 'trips/trips_detailed.html', {'form': form})
 
     def add_pin(self, user):
         # create pin and add it to my list of pin objects in trip, add tally to pin total
@@ -67,25 +49,39 @@ class Trips(models.Model):
         self.participants_total += 1
         self.save()
 
+    @property
     def get_participants(self):
-        all_participants = []
-        for participants in Participants.objects.all().filter(trip_id__exact=self.id):
-            all_participants += participants
-        return all_participants
+        for participants in Participants.objects.all().filter(trip__slug__exact=self.slug):
+            yield participants
 
+    @property
     def get_comments(self):
-        all_com = []
-        for comment in Comments.objects.all().filter(trip_id__exact=self.id):
-            all_com += comment
-        return all_com
+        for comment in Comments.objects.all().filter(trip__slug__exact=self.slug):
+            yield comment
 
+    @property
+    def get_pins(self):
+        for pin in Pins.objects.all().filter(trip_id__exact=self.id):
+            yield pin
+
+    @property
+    def get_created_at(self):
+        return self.created_at
+
+    @property
+    def get_modified_at(self):
+        return self.modified_at
+
+    @property
     def get_status(self):
-        if self.start_date <= datetime.date.today() and not self.end_date >= datetime.date.today():
-            return 'in_progress'
-        elif self.start_date > datetime.date.today():
+        if self.start_date > datetime.date.today():
             return 'coming_up'
         elif self.end_date < datetime.date.today():
             return 'completed'
+        elif self.start_date <= datetime.date.today() and not self.end_date >= datetime.date.today():
+            return 'in_progress'
+        else:
+            return 'started_today'
 
     def __str__(self):
         return str(f'Trip ID: ' + str(self.pk) + ' "' + self.name + '"' + ' created by '
@@ -96,7 +92,7 @@ class Trips(models.Model):
 
 
 class Comments(models.Model):
-    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
+    user_id = models.ForeignKey('accounts.InsensitiveUser', on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
     message = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -107,14 +103,14 @@ class Comments(models.Model):
 
     def __str__(self):
         return str(f'Comment ID: ' + str(self.pk) + ' "' + self.message + '"' + ' created by '
-                   + str(self.user_id.username) + ' left on Trip ID: ' + self.trip.pk)
+                   + self.user_id.username + ' left on Trip ID: ' + str(self.trip.pk))
 
     def get_absolute_url(self):
         return reverse('trips:trips_detailed', kwargs={'slug': self.trip.slug})
 
 
 class Pins(models.Model):
-    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
+    user_id = models.ForeignKey('accounts.InsensitiveUser', on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -124,19 +120,19 @@ class Pins(models.Model):
 
     def __str__(self):
         return str(f'Pin ID: ' + str(self.pk) + ' for trip: '
-                   + '"' + self.trip.name + '"' + 'left by user: ' + self.user_id.username)
+                   + '"' + self.trip.name + '"' + ' left by user: ' + self.user_id.username)
 
     def get_absolute_url(self):
         return reverse('trips:trips_detailed', kwargs={'slug': self.trip.slug})
 
 
 class Participants(models.Model):
-    user_id = models.ForeignKey(InsensitiveUser, on_delete=models.CASCADE)
+    user_id = models.ForeignKey('accounts.InsensitiveUser', on_delete=models.CASCADE)
     trip = models.ForeignKey(Trips, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'participant'
-        verbose_name_plural = 'participants_total'
+        verbose_name_plural = 'participants'
 
     def __str__(self):
         return str(f'Participant: ' + self.user_id.username + " for trip: " + self.trip.pk)
@@ -170,8 +166,8 @@ class Itinerary(models.Model):
 @receiver(post_save, sender=Trips)
 def save_or_create_user_objs(sender, instance, created, **kwargs):
     if created:
-        Itinerary.objects.get_or_create(user_id=instance)
-        DailyLog.objects.get_or_create(user_id=instance)
+        Itinerary.objects.get_or_create(trip=instance)
+        DailyLog.objects.get_or_create(trip=instance)
     instance.itinerary.save()
     instance.dailylog.save()
 

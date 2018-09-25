@@ -1,7 +1,8 @@
 from django.contrib import admin
-from accounts.models import UserProfile, UserNotifications
+from accounts.models import Profile, UserNotifications, InsensitiveUser, UserCalendar
 
 # Register your models here.
-admin.site.register(UserProfile)
+admin.site.register(InsensitiveUser)
+admin.site.register(Profile)
 admin.site.register(UserNotifications)
-# admin.site.register(UserCalendar)
+admin.site.register(UserCalendar)
