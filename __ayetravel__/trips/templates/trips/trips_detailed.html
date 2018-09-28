@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 {% extends "app/base.html" %}
 {% load static %}
-{% load base_tags %}
-
-{% get_trips_detail request as detailed_trip %}
 
 {% block title_block %}
     ayetravel - My Trips - {{ detailed_trip.name }}
@@ -264,5 +261,11 @@
             </div>
             <!-- end row -->
         </div> <!-- container -->
+
+    {% block scipts_block %}
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+        </script>
+    {% endblock %}
 
 {% endblock %}

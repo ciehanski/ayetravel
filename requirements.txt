@@ -1,0 +1,16 @@
+Django==2.1.1
+bcrypt==3.1.4
+python-memcached==1.59
+cffi==1.11.5
+argon2-cffi==18.3.0
+Pillow==5.2.0
+psycopg2==2.7.5
+gunicorn==19.9.0
+pytest==3.8.1
+pytest-django==3.4.3
+coverage==4.5.1
+pytest-cov==2.6.0
+mixer==6.0.1
+beautifulsoup4==4.6.3
+lxml==4.2.5
+requests==2.19.1

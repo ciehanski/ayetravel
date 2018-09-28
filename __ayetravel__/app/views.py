@@ -1,7 +1,9 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from trips.models import Trips
+from accounts.models import UserNotifications
+from trips.models import Trips, Participants
 
 
 class BaseViewMixin(LoginRequiredMixin, object):
@@ -9,8 +11,15 @@ class BaseViewMixin(LoginRequiredMixin, object):
     template_name = 'app/base.html'
 
     def get(self, request, *args, **kwargs):
-        # Search handling
         context = super().get_context_data(**kwargs)
+        context['notifications'] = get_notifications(request)
+        context['user_trips'] = get_user_trips(request)
+        context['community_trips'] = get_community_trips(request)
+        context['notif_total'] = get_total_user_notifs(request)
+        context['total_user_trips'] = get_total_user_trips(request)
+        context['participants'] = get_participants(request)
+
+        # Search handling
         search_term = request.GET.get('search')
         if search_term is not None:
             search = Trips.objects.filter(name__icontains=search_term)
@@ -42,6 +51,44 @@ class SearchView(BaseViewMixin, ListView):
 class CalendarView(BaseViewMixin, TemplateView):
     context_object_name = 'calendar'
     template_name = 'app/calendar.html'
+
+
+def get_notifications(request):
+    for notif in UserNotifications.objects.all().filter(
+            user_id__username__iexact=request.user.get_username()).order_by('timestamp'):
+        yield notif
+
+
+def get_total_user_notifs(request):
+    return UserNotifications.objects.all().filter(user_id__username__iexact=request.user.get_username()).count()
+
+
+def get_total_user_trips(request):
+    return Trips.objects.all().filter(user_id__username__iexact=request.user.get_username()).count()
+
+
+def get_community_trips(request):
+    for trip in Trips.objects.all().filter(public=True).filter(~Q(
+            user_id__username__iexact=request.user.get_username())).order_by('pins_total'):
+        yield trip
+
+
+def get_participants(request):
+    for participant in Participants.objects.all().filter(
+            user_id__username__iexact=request.user.get_username()).order_by('modified_at'):
+        yield participant
+
+
+# def get_trips_detail(request):
+#     for trip in Trips.objects.all():
+#         if trip.user_id.username == request.user.get_username() or trip.public:
+#             yield trip
+
+
+def get_user_trips(request):
+    for trip in Trips.objects.all().filter(
+            user_id__username__iexact=request.user.get_username()).order_by('modified_at'):
+        yield trip
 
 
 def handler404(request):

@@ -8,10 +8,10 @@ import datetime
 
 class Trips(models.Model):
     user_id = models.ForeignKey('accounts.InsensitiveUser', on_delete=models.CASCADE)
-    slug = models.SlugField(max_length=100, unique=True, default='', blank=True)
-    name = models.CharField(max_length=50)
-    user_location = models.CharField(max_length=100)
-    destination = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=31, unique=True, default='', blank=True)
+    name = models.CharField(max_length=25)
+    user_location = models.CharField(max_length=50)
+    destination = models.CharField(max_length=50)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     budget = models.IntegerField(default=0)

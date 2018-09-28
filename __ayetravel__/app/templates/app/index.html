@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% extends "app/base.html" %}
 {% load static %}
-{% load base_tags %}
 
 {% block title_block %}
     ayetravel - Dashboard
@@ -93,9 +92,7 @@
 
                     <!-- Start Content-->
                     <div class="row">
-                        {% get_total_user_trips request as total_user_trips %}
                         {% if total_user_trips > 0 %}
-                        {% get_user_trips request as user_trips %}
                         {% for trip in user_trips %}
                         <div class="col-md-6 col-xl-3">
                             <!-- project card -->
@@ -119,27 +116,40 @@
                                     <!-- project title-->
                                     <h4 class="mt-0">
                                         <a href="my/trips/{{ trip.slug }}" class="text-dark">{{ trip.name }}</a>
+                                        {% if trip.get_status == 'in_progress' %}
+                                            <div class="badge badge-success badge-pill">In Progress</div>
+                                        {% elif trip.get_status == 'coming_up' %}
+                                            <div class="badge badge-primary badge-pill">Coming Up</div>
+                                        {% elif trip.get_status == 'completed' %}
+                                            <div class="badge badge-info badge-pill">Completed</div>
+                                        {% elif trip.get_status == 'started_today' %}
+                                            <div class="badge badge-warning badge-pill">Just Started</div>
+                                        {% endif %}
                                     </h4>
 
-                                    {% if trip.get_status == 'in_progress' %}
-                                        <div class="badge badge-success badge-pill">In Progress</div>
-                                    {% elif trip.get_status == 'coming_up' %}
-                                        <div class="badge badge-primary badge-pill">Coming Up</div>
-                                    {% elif trip.get_status == 'completed' %}
-                                        <div class="badge badge-info badge-pill">Completed</div>
-                                    {% elif trip.get_status == 'started_today' %}
-                                        <div class="badge badge-warning badge-pill">Just Started</div>
-                                    {% endif %}
+                                    <center><h5>
+                                        <strong>{{ trip.user_location }}</strong> → <strong>{{ trip.destination }}</strong> <br>
+                                    </h5></center>
 
-                                    <p class="text-muted font-13 mb-3">
-                                        From: {{ trip.user_location }} <br>
-                                        Destination: {{ trip.destination }} <br>
-                                        Budget: ${{ trip.budget }} <br>
-                                        Participants: {{ trip.participants_total }} <br>
-                                        Start Date: {{ trip.start_date }} <br>
-                                        End Date: {{ trip.end_date }} <br>
-                                        Modified At: {{ trip.modified_at }}
+                                    <p>
+                                        Budget: <strong>${{ trip.budget }}</strong> <br>
+                                        Participants: <strong>{{ trip.participants_total }}</strong> <br>
+                                        Start Date: <strong>{{ trip.start_date }}</strong> <br>
+                                        End Date: <strong>{{ trip.end_date }}</strong> <br>
                                     </p>
+
+                                    {% if trip.participants_total > 1 %}
+                                    <div>
+                                        <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.get_username }}" class="d-inline-block">
+                                            <img src="{{ user.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
+                                        </a>
+                                        {% for prt in participants %}
+                                        <a href="accounts/{{ prt.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ prt.user_id.get_username }}" class="d-inline-block">
+                                            <img src="{{ prt.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="friend">
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
 
                                     <!-- project detail-->
                                     <p class="mb-1">
@@ -152,20 +162,8 @@
                                             <b>{{ trip.comments_total }}</b> Comments
                                         </span>
                                     </p>
-                                    {% if trip.participants_total > 1 %}
-                                    <div>
-                                        <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.username }}" class="d-inline-block">
-                                            <img src="{{ user.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
-                                        </a>
-                                        {% get_participants request as participants %}
-                                        {% for prt in participants %}
-                                        <a href="accounts/{{ prt.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ prt.user_id.username }}" class="d-inline-block">
-                                            <img src="{{ prt.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="friend">
-                                        </a>
-                                        {% endfor %}
-                                    </div>
-                                    {% endif %}
-                                </div> <!-- end card-body-->
+                                </div><!-- end card-body-->
+
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item p-3">
                                         <!-- project progress-->
@@ -194,7 +192,6 @@
                     <br>
 
                     <div class="row">
-                        {% get_community_trips request as community_trips %}
                         {% for trip in community_trips %}
                         <div class="col-md-6 col-xl-3">
                             <!-- project card -->
@@ -218,25 +215,40 @@
                                     <!-- project title-->
                                     <h4 class="mt-0">
                                         <a href="community/trips/{{ trip.slug }}" class="text-dark">{{ trip.name }}</a>
+                                        {% if trip.get_status == 'in_progress' %}
+                                            <div class="badge badge-success badge-pill">In Progress</div>
+                                        {% elif trip.get_status == 'coming_up' %}
+                                            <div class="badge badge-primary badge-pill">Coming Up</div>
+                                        {% elif trip.get_status == 'completed' %}
+                                            <div class="badge badge-info badge-pill">Completed</div>
+                                        {% elif trip.get_status == 'started_today' %}
+                                            <div class="badge badge-warning badge-pill">Just Started</div>
+                                        {% endif %}
                                     </h4>
 
-                                    {% if trip.get_status == 'in_progress' %}
-                                        <div class="badge badge-success badge-pill">In Progress</div>
-                                    {% elif trip.get_status == 'coming_up' %}
-                                        <div class="badge badge-primary badge-pill">Coming Up</div>
-                                    {% elif trip.get_status == 'completed' %}
-                                        <div class="badge badge-info badge-pill">Completed</div>
-                                    {% elif trip.get_status == 'started_today' %}
-                                        <div class="badge badge-warning badge-pill">Just Started</div>
-                                    {% endif %}
-                                    <br>
+                                    <center><h5>
+                                        <strong>{{ trip.user_location }}</strong> → <strong>{{ trip.destination }}</strong> <br>
+                                    </h5></center>
 
-                                    <p class="text-muted font-13 mb-3">
-                                        From: {{ trip.user_location }} <br>
-                                        Destination: {{ trip.destination }} <br>
-                                        Budget: ${{ trip.budget }} <br>
-                                        Participants: {{ trip.participants_total }}
+                                    <p>
+                                        Budget: <strong>${{ trip.budget }}</strong> <br>
+                                        Participants: <strong>{{ trip.participants_total }}</strong> <br>
+                                        Start Date: <strong>{{ trip.start_date }}</strong> <br>
+                                        End Date: <strong>{{ trip.end_date }}</strong> <br>
                                     </p>
+
+                                    {% if trip.participants_total > 1 %}
+                                    <div>
+                                        <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.get_username }}" class="d-inline-block">
+                                            <img src="{{ user.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
+                                        </a>
+                                        {% for prt in participants %}
+                                        <a href="accounts/{{ prt.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ prt.user_id.get_username }}" class="d-inline-block">
+                                            <img src="{{ prt.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="friend">
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
 
                                     <!-- project detail-->
                                     <p class="mb-1">
@@ -249,22 +261,7 @@
                                             <b>{{ trip.comments_total }}</b> Comments
                                         </span>
                                     </p>
-                                    <div>
-                                        <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.username }}" class="d-inline-block">
-                                            <img src="{{ trip.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
-                                        </a>
-                                        <!-- TODO create participant model -->
-{#                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.participants_total.get_full_name }}" class="d-inline-block">#}
-{#                                            <img src="{{ trip.participants_total.userproile.profile_picture.url }}" class="rounded-circle avatar-xs" alt="friend">#}
-{#                                        </a>#}
-{##}
-{#                                        <a href="javascript:void(0);" class="d-inline-block text-dark font-weight-bold ml-2">#}
-{#                                            +7 more#}
-{#                                        </a>#}
-                                    </div>
-                                </div> <!-- end card-body-->
-                                <ul class="list-group list-group-flush">
-                                </ul>
+                                </div><!-- end card-body-->
                             </div> <!-- end card-->
                         </div> <!-- end col -->
                         {% endfor %}

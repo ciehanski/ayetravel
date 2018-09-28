@@ -11,6 +11,7 @@ class LoginForm(forms.Form):
                                                   'type': 'text',
                                                   'name': 'username_textbox',
                                                   'aria-describedby': 'inputGroupPrepend',
+                                                  'autofocus': '"autofocus"',
                                                   }))
 
     botcatcher = forms.CharField(required=False, validators=[validators.MaxLengthValidator(0)],

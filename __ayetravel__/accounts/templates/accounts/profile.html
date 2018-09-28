@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 {% extends "app/base.html" %}
-{% load account_tags %}
-
-{% get_current_user request as current_user %}
 
 {% block title_block %}
     ayetravel - {{ current_user.username }}'s Profile
@@ -22,7 +19,7 @@
                             <li class="breadcrumb-item active">Profile</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">{{ current_user.username }}'s Profile</h4>
+                    <h4 class="page-title">{{ current_user.get_username }}'s Profile</h4>
                 </div>
             </div>
         </div>
@@ -40,7 +37,7 @@
                                     <span class="float-left m-2 mr-4"><img src="{{ current_user.profile.get_profile_picture }}" style="height: 100px;" alt="" class="rounded-circle img-thumbnail"></span>
                                     <div class="media-body">
 
-                                        <h4 class="mt-1 mb-1 text-white">{{ current_user.username }}</h4>
+                                        <h4 class="mt-1 mb-1 text-white">{{ current_user.get_username }}</h4>
                                         <p class="font-13 text-white-50"> {{ current_user.profile.location }}</p>
 
                                         <ul class="mb-0 list-inline text-light">

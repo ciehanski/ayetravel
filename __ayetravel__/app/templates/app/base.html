@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% load base_tags %}
     <html lang="en">
 
     <head>
@@ -114,7 +113,6 @@
                             <li class="dropdown notification-list">
                                 <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     <i class="dripicons-bell noti-icon"></i>
-                                    {% get_total_user_notifs request as notif_total %}
                                     {% if notif_total > 0 %}
                                         <span class="noti-icon-badge"></span>
                                     {% endif %}
@@ -137,7 +135,6 @@
                                     <div class="slimscroll" style="max-height: 230px;">
 
                                     {% if notif_total > 0 %}
-                                    {% get_notifications request as notifications %}
                                     {% for notif in notifications %}
                                         <!-- item-->
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">

@@ -10,22 +10,16 @@
 
     <div class="container-fluid">
         {{ error }}
-        {% for trip in search_results %}
          <div class="row">
+                {% for trip in search_results %}
                 <div class="col-md-6 col-xl-3">
                     <!-- project card -->
                     <div class="card d-block">
                         <div class="card-body">
                             <div class="dropdown card-widgets">
-                                {% if trip.public %}
                                 <a href="{% url "community:community_trips_detailed" trip.slug %}" class="dropdown-toggle arrow-none" data-toggle="dropdown" aria-expanded="false">
                                     <i class="dripicons-dots-3"></i>
                                 </a>
-                                {% else %}
-                                <a href="{% url "trips:trips_detailed" trip.slug %}" class="dropdown-toggle arrow-none" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="dripicons-dots-3"></i>
-                                </a>
-                                {% endif %}
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <!-- item-->
                                     <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-pencil mr-1"></i>Edit</a>
@@ -38,18 +32,42 @@
                                 </div>
                             </div>
                             <!-- project title-->
-
                             <h4 class="mt-0">
-                                {% if trip.public %}
-                                    <a href="{% url "community:community_trips_detailed" trip.slug %}" class="text-dark">{{ trip.name }}</a>
-                                {% else %}
-                                    <a href="{% url "trips:trips_detailed" trip.slug %}" class="text-dark">{{ trip.name }}</a>
+                                <a href="community/trips/{{ trip.slug }}" class="text-dark">{{ trip.name }}</a>
+                                {% if trip.get_status == 'in_progress' %}
+                                    <div class="badge badge-success badge-pill">In Progress</div>
+                                {% elif trip.get_status == 'coming_up' %}
+                                    <div class="badge badge-primary badge-pill">Coming Up</div>
+                                {% elif trip.get_status == 'completed' %}
+                                    <div class="badge badge-info badge-pill">Completed</div>
+                                {% elif trip.get_status == 'started_today' %}
+                                    <div class="badge badge-warning badge-pill">Just Started</div>
                                 {% endif %}
                             </h4>
 
-                            <div class="badge badge-success mb-3">Finished</div>
-                            <p class="text-muted font-13 mb-3">With supporting text below as a natural lead-in to additional contenposuere erat a ante...<a href="javascript:void(0);" class="font-weight-bold text-muted">view more</a>
+                            <center><h5>
+                                <strong>{{ trip.user_location }}</strong> → <strong>{{ trip.destination }}</strong> <br>
+                            </h5></center>
+
+                            <p>
+                                Budget: <strong>${{ trip.budget }}</strong> <br>
+                                Participants: <strong>{{ trip.participants_total }}</strong> <br>
+                                Start Date: <strong>{{ trip.start_date }}</strong> <br>
+                                End Date: <strong>{{ trip.end_date }}</strong> <br>
                             </p>
+
+                            {% if trip.participants_total > 1 %}
+                            <div>
+                                <a href="accounts/{{ trip.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ user.get_username }}" class="d-inline-block">
+                                    <img src="{{ user.profile.get_profile_picture }}" class="rounded-circle avatar-xs">
+                                </a>
+                                {% for prt in participants %}
+                                <a href="accounts/{{ prt.user_id.username }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ prt.user_id.get_username }}" class="d-inline-block">
+                                    <img src="{{ prt.user_id.profile.get_profile_picture }}" class="rounded-circle avatar-xs" alt="friend">
+                                </a>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
 
                             <!-- project detail-->
                             <p class="mb-1">
@@ -62,26 +80,10 @@
                                     <b>{{ trip.comments_total }}</b> Comments
                                 </span>
                             </p>
-                            <div>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ trip.user_id.get_username }}" class="d-inline-block">
-                                    <img src="{{ trip.user_id.userprofile.profile_picture.url }}" class="rounded-circle avatar-xs" alt="friend">
-                                </a>
-
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty" class="d-inline-block">
-                                    <img src="{% static "app/img/users/avatar-7.jpg" %}" class="rounded-circle avatar-xs" alt="friend">
-                                </a>
-
-                                <a href="javascript:void(0);" class="d-inline-block text-dark font-weight-bold ml-2">
-                                    +7 more
-                                </a>
-                            </div>
-                        </div> <!-- end card-body-->
-                        <ul class="list-group list-group-flush">
-                        </ul>
+                        </div><!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col -->
-            </div>
-            <!-- end row-->
             {% endfor %}
+         </div>
     </div>
 {% endblock %}

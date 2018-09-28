@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 {% extends "app/base.html" %}
 {% load static %}
-{% load base_tags %}
-
-{% get_total_user_trips request as user_trips %}
 
 {% block title_block %}
-    ayetravel - Community Trips - {{ user_trips.name }}
+ayetravel - Community Trips - {{ detailed_trip.name }}
 {% endblock %}
 
 {% block body_block %}
-<!-- TODO fix logic, does not allow current user to view own trips -->
-{#{% if trip.user_id.get_username == user.get_username or trip.public == True %}#}
         <!-- Start Content-->
         <div class="container-fluid">
             <!-- start page title -->
@@ -22,7 +17,7 @@
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="{% url "app:index" %}">Dashboard</a></li>
                                 <li class="breadcrumb-item"><a href="{% url "trips:trips_list" %}">Trips</a></li>
-                                <li class="breadcrumb-item active">{{ user_trips.name }}</li>
+                                <li class="breadcrumb-item active">{{ detailed_trip.name }}</li>
                             </ol>
                         </div>
                         <h4 class="page-title">Community Trip Details</h4>
@@ -53,35 +48,35 @@
                             </div>
                             <!-- project title-->
                             <h3 class="mt-0">
-                                {{ user_trips.name }}
+                                {{ detailed_trip.name }}
                             </h3>
                             <div class="badge badge-secondary mb-3">Ongoing</div>
 
                             <h5>Packing List:</h5>
 
                             <p class="text-muted mb-2">
-                                {{ user_trips.packing_list }}
+                                {{ detailed_trip.packing_list }}
                             </p>
 
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-4">
                                         <h5>Start Date</h5>
-                                        <p>{{ user_trips.start_date }}
+                                        <p>{{ detailed_trip.start_date }}
 {#                                            <small class="text-muted">1:00 PM</small></p>#}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-4">
                                         <h5>End Date</h5>
-                                        <p>{{ user_trips.end_date }}
+                                        <p>{{ detailed_trip.end_date }}
 {#                                            <small class="text-muted">1:00 PM</small></p>#}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-4">
                                         <h5>Budget</h5>
-                                        <p>{{ user_trips.budget }}</p>
+                                        <p>{{ detailed_trip.budget }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +116,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="header-title mb-3">Map of {{ user_trips.destination }}</h4>
+                                    <h4 class="header-title mb-3">Map of {{ detailed_trip.destination }}</h4>
                                     <div id="gmaps-markers" class="gmaps"></div>
                                 </div> <!-- end card-body-->
                             </div> <!-- end card-->
@@ -131,7 +126,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="mt-0 mb-3">Comments ({{ user_trips.comments_total }})</h4>
+                            <h4 class="mt-0 mb-3">Comments ({{ detailed_trip.comments_total }})</h4>
 
                             <textarea class="form-control form-control-light mb-2" placeholder="Write message" id="example-textarea" rows="3"></textarea>
                                 <div class="text-right">
