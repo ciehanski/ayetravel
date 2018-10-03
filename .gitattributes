@@ -2,3 +2,4 @@ __ayetravel__/static/* linguist-vendored
 __ayetravel__/accounts/templates/* linguist-vendored
 __ayetravel__/community/templates/* linguist-vendored
 __ayetravel__/trips/templates/* linguist-vendored
+__ayetravel__/app/templates/* linguist-vendored
